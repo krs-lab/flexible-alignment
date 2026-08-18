@@ -1,0 +1,39 @@
+---
+title: "flexible-alignment"
+author: "Visnu Chowdhury"
+format: 
+  html: 
+    code-fold: true
+    code-overflow: wrap
+    fontsize: 0.9em
+editor: visual
+execute: 
+  echo: true
+---
+
+------------------------------
+
+[aaa]{style="color:blue"}
+
+aaa
+
+1.  [aaa]{style="color:blue"}
+
+    i)  [aaa]{style="color:blue"}\
+    
+**aaa:** aaa $\rightarrow$\ aaa
+
+```{python}
+# aaa
+
+import pandas as pd
+
+print("aaa")
+```
+
+```{bash}
+python3 -m venv binf610_env
+source binf610_env/bin/activate
+pip install <required-tools-packages>
+python3 hw4_codes_Visnu.py
+```
