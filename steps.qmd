@@ -13,13 +13,135 @@ execute:
 
 ------------------------------
 
-This is a qmd (Quarto Markdown) file, similar to the R Markdown (.Rmd) file, but mutlti-language, which will contain the instructions of what is being done, with the how-tos, and why, so that it will be easy to replicate the steps.    
+This is a Quarto Markdown (.qmd) file, similar to the R Markdown (.Rmd) file - just mutlti-language. The plan is to add instructions of what is being done, why, and how, to ensure reproducibility. 
 
-1.  [aaa]{style="color:blue"}
+------------------------------
 
-    i)  [aaa]{style="color:blue"}\
-    
-**aaa:** aaa $\rightarrow$\ aaa
+**Setting up local git repository**
+
+Here, flexible-alignment repository of the KRS lab is being cloned locally, to check write access, and upload the local changes. 
+
+Cloning should be done only once in the beginning. Listing out steps just to keep track.  
+
+```{bash}
+git clone https://github.com/krs-lab/flexible-alignment.git # run once
+cd flexible-alignment/
+git remote -v # shows all remote repos
+git push --dry-run origin main # check write access 
+git status # check ls of chnaged files 
+git add steps.qmd
+git commit -m "note what's done in this step"
+git push -u origin main # enter github username & key
+```
+
+------------------------------
+
+**Sanity checks after PDB file generation**
+
+I have generated some PDB files using `colabfold_batch` via BIOMIX for the 600-1000aa long sequences, the GenBank IDs of which could not be matched to the UniProt accession IDs even after BLASTp, ran locally. I am adding some codes here that will let do some sanity checks. 
+
+Just adding the codes, which was run to check the validity of the PDBs. 
+
+```{bash}
+# check if all PDBs based on FASTA inputs are accounted for
+python3 -c '
+import glob
+import os
+
+fasta_files = glob.glob("*.fasta") # parse fasta headers 
+expected_ids = set()
+
+for fpath in fasta_files:
+    with open(fpath, "r") as f:
+        for line in f:
+            if line.startswith(">"):
+                # Take the sequence ID (first word after >)
+                seq_id = line[1:].strip().split()[0]
+                expected_ids.add(seq_id)
+
+pdb_files = glob.glob("output/*.pdb") # find pdbs
+pdb_ids = set()
+
+for ppath in pdb_files:
+    filename = os.path.basename(ppath)
+    # Extract the ID prefix (before _unrelaxed, _relaxed, or .pdb)
+    base_id = filename.replace(".pdb", "")
+    base_id = base_id.split("_unrelaxed")[0].split("_relaxed")[0]
+    pdb_ids.add(base_id)
+
+missing = expected_ids - pdb_ids # compare and output stats
+found = expected_ids.intersection(pdb_ids)
+
+print("=" * 50)
+print(f"Total FASTA Queries Expected : {len(expected_ids)}")
+print(f"Total Matching PDBs Found   : {len(found)}")
+print(f"Total Missing PDBs           : {len(missing)}")
+print("=" * 50)
+
+if missing:
+    print("\nMissing Sequence IDs:")
+    for m in sorted(missing):
+        print(f" - {m}")
+else:
+    print("SUCCESS: All expected PDB files are accounted for!\n")
+'
+
+# ---
+cd output/ # go to "ourput" dir  
+
+# --- 
+# checking atom nums, should not be 0, or ending w errors
+for f in *.pdb; 
+do echo -n "$f: "; 
+  grep -c "^ATOM" "$f" | tr '\n' ' '; 
+  echo -n "atoms | Last line: "; tail -n 1 "$f"; 
+done
+echo
+
+# --- 
+# check pLDDT score of each 
+python3 -c '
+import glob
+import os
+
+output_file = "plddt_summary.txt"
+lines = []
+
+for pdb_file in sorted(glob.glob("*.pdb")):
+    scores = []
+    with open(pdb_file, "r") as f:
+        for line in f:
+            if line.startswith("ATOM") and line[12:16].strip() == "CA":
+                try:
+                    scores.append(float(line[60:66].strip()))
+                except ValueError:
+                    continue
+
+    if scores:
+        avg_plddt = sum(scores) / len(scores)
+        result = f"{os.path.basename(pdb_file):35s} | Residues: {len(scores):4d} | Avg pLDDT: {avg_plddt:.2f}"
+    else:
+        result = f"{os.path.basename(pdb_file):35s} | CORRUPTED / NO ATOMS FOUND"
+
+    lines.append(result)
+    print(result)
+
+if lines:
+    with open(output_file, "w") as out_f:
+        out_f.write("\n".join(lines) + "\n")
+    print(f"Done. Processed {len(lines)} files. Summary saved to {output_file}\n")
+'
+
+# ---
+du -sh ../output/ # check disk usage
+ls *.pickle # remove raw .pickle files to save space 
+
+```
+
+
+
+
+------------------------------
 
 ```{python}
 # aaa
@@ -27,11 +149,4 @@ This is a qmd (Quarto Markdown) file, similar to the R Markdown (.Rmd) file, but
 import pandas as pd
 
 print("aaa")
-```
-
-```{bash}
-python3 -m venv binf610_env
-source binf610_env/bin/activate
-pip install <required-tools-packages>
-python3 hw4_codes_Visnu.py
 ```
