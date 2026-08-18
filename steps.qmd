@@ -13,9 +13,7 @@ execute:
 
 ------------------------------
 
-[aaa]{style="color:blue"}
-
-aaa
+This is a qmd (Quarto Markdown) file, similar to the R Markdown (.Rmd) file, but mutlti-language, which will contain the instructions of what is being done, with the how-tos, and why, so that it will be easy to replicate the steps.    
 
 1.  [aaa]{style="color:blue"}
 
