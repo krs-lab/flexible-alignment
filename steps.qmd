@@ -40,7 +40,7 @@ git push -u origin main # enter github username & key
 
 I have generated some PDB files using `colabfold_batch` via BIOMIX for the 600-1000aa long sequences, the GenBank IDs of which could not be matched to the UniProt accession IDs even after BLASTp, ran locally. I am adding some codes here that will let do some sanity checks. 
 
-Just adding the codes, which was run to check the validity of the PDBs. 
+Just adding the bash (or Python wrapped in bash) codes, which was run to check the validity of the PDBs. 
 
 ```{bash}
 # check if all PDBs based on FASTA inputs are accounted for
@@ -138,15 +138,6 @@ ls *.pickle # remove raw .pickle files to save space
 
 ```
 
-
-
-
 ------------------------------
 
-```{python}
-# aaa
 
-import pandas as pd
-
-print("aaa")
-```
