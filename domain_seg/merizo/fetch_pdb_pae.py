@@ -71,14 +71,25 @@ def main():
 
     # Read unique UniProt IDs from CSV
     uniprot_ids = []
+    valid_column_names = {"uniprot_ids", "uniprot_id", "uniprot"}
+
     with open(csv_path, "r", encoding="utf-8") as fh:
         reader = csv.DictReader(fh)
-        if "uniprot_ids" not in reader.fieldnames:
-            print("Error: Input CSV must contain a 'uniprot_ids' column.")
+        
+        # Dynamically match column name regardless of capitalization
+        uniprot_col = None
+        if reader.fieldnames:
+            for field in reader.fieldnames:
+                if field.strip().lower() in valid_column_names:
+                    uniprot_col = field
+                    break
+
+        if not uniprot_col:
+            print("Error: Input CSV must contain a UniProt ID column (e.g., 'uniprot_ids', 'UNIPROT_IDs', 'uniprot', etc.).")
             sys.exit(1)
             
         for row in reader:
-            uid = row["uniprot_ids"].strip()
+            uid = row[uniprot_col].strip()
             if uid and uid not in uniprot_ids:
                 uniprot_ids.append(uid)
 

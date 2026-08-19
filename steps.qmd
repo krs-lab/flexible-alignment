@@ -18,19 +18,19 @@ execute:
   echo: true
 ---
 
-------------------------------
+------------------------------------------------------------------------
 
-This is a Quarto Markdown (.qmd) file, similar to the R Markdown (.Rmd) file - just mutlti-language. The plan is to add instructions of what is being done, why, and how, to ensure reproducibility. 
+This is a Quarto Markdown (.qmd) file, similar to the R Markdown (.Rmd) file - just mutlti-language. The plan is to add instructions of what is being done, why, and how, to ensure reproducibility.
 
-------------------------------
+------------------------------------------------------------------------
 
 **Setting up local git repository**
 
-Here, flexible-alignment repository of the KRS lab is being cloned locally, to check write access, and upload the local changes. 
+Here, flexible-alignment repository of the KRS lab is being cloned locally, to check write access, and upload the local changes.
 
-Cloning should be done only once in the beginning. Listing out steps just to keep track.  
+Cloning should be done only once in the beginning. Listing out steps just to keep track.
 
-```bash
+``` bash
 #| label: setting-up-git-repo
 #| echo: true
 #| eval: false
@@ -43,17 +43,19 @@ git status # check ls of chnaged files
 git add steps.qmd
 git commit -m "note what's done in this step"
 git push -u origin main # enter github username & key
+
+git mv old_name.py new_name.py # commit & push as before 
 ```
 
-------------------------------
+------------------------------------------------------------------------
 
 **Sanity checks after PDB file generation**
 
-I have generated some PDB files using `colabfold_batch` via BIOMIX for the 600-1000aa long sequences, the GenBank IDs of which could not be matched to the UniProt accession IDs even after BLASTp, ran locally. I am adding some codes here that will let do some sanity checks. 
+I have generated some PDB files using `colabfold_batch` via BIOMIX for the 600-1000aa long sequences, the GenBank IDs of which could not be matched to the UniProt accession IDs even after BLASTp, ran locally. I am adding some codes here that will let do some sanity checks.
 
-Just adding the bash (or Python wrapped in bash) codes, which was run to check the validity of the PDBs. 
+Just adding the bash (or Python wrapped in bash) codes, which was run to check the validity of the PDBs.
 
-```bash
+``` bash
 # check if all PDBs based on FASTA inputs are accounted for
 python3 -c '
 import glob
@@ -146,20 +148,19 @@ if lines:
 # ---
 du -sh ../output/ # check disk usage
 ls *.pickle # remove raw .pickle files to save space 
-
 ```
 
-------------------------------
+------------------------------------------------------------------------
 
 **Rational domain segmentation with Merizo**
 
-Initially wanted to use PAE to isolate domains, but problem arises when 2 domains are connected with high confidence structures like $\alpha$-helix, or the overall protein has very low pLDDT score, not only at the disordered region. In the 1st case, I will likely get 1 domain, instead of 2, and the in the 2nd case I will probably get fragmented domains, meaning much higher number of domains instead of the true ones. 
+Initially wanted to use PAE to isolate domains, but problem arises when 2 domains are connected with high confidence structures like $\alpha$-helix, or the overall protein has very low pLDDT score, not only at the disordered region. In the 1st case, I will likely get 1 domain, instead of 2, and the in the 2nd case I will probably get fragmented domains, meaning much higher number of domains instead of the true ones.
 
-Therefore I wanted to try Merizo @lau2023merizo, which is fast, gives pretty accurate domain boundaries based on the 3D spatial packing.    
+Therefore I wanted to try Merizo @lau2023merizo, which is fast, gives pretty accurate domain boundaries based on the 3D spatial packing.
 
 Preliminary plan: get AF PDB+PAE $\rightarrow$ run merizo $\rightarrow$ run PAE-greedy $\rightarrow$ eval -ve, adj th $\rightarrow$ eval +ve, map CATH/SCOP w Adjusted Rand Index (ARI) $\rightarrow$ eval test cases
 
-```python
+``` python
 #| label: fetch-alphafold-pdb-pae-w-python-from-csv-input
 
 #!/usr/bin/env python3
@@ -260,13 +261,13 @@ if __name__ == "__main__":
     main()
 ```
 
-```bash
+``` bash
 #| label: fetch-alphafold-pdb-pae-from-cli
 
 python3 fetch_pdb_pae.py targets_merizo_test.csv
 ```
 
-```bash
+``` bash
 #| label: setting-up-merizo-on-KRSlab-WS2
 
 # create and activate conda env
@@ -292,14 +293,14 @@ cd /fast_disk/visnu/merizo_work/ # where merizo is
 git clone https://github.com/Chattz/Merizo.git
 ```
 
-```bash
+``` bash
 #| label: run-merizo
 
 # run merizo
 python Merizo/predict.py -d cpu -i /path/to/pdb_files/*.pdb --iterate --save_domains > merizo_results.tsv
 ```
 
-```bash
+``` bash
 #| label: check-merizo-results
 
 # sanity check > run from where the segmented domains are 
@@ -310,4 +311,14 @@ for d in *.domains; do echo "=== $d ==="; cat "$d"; echo ""; done
 # P00558_merizo_v2        2       193     1.000   96.409  2       199-391
 ```
 
-Tested with 2 positive and 2 negative control proteins and 3 test proteins. Merizo results did not match with the CATH db information. Did a preliminary work integrating PAE matrix information for each protein to tune the PAE threshold to determine domain boundary, where merizo will eb doing teh first-pass. Basically, if average PAE score is low (e.g., ~3A) and merizo is showing 2 domains, they will be merged, and if merizo is showing 1 domaain but the PAE is >12A, they will be separated. 
+Tested with 2 positive and 2 negative control proteins and 3 test proteins. Merizo results did not match with the CATH db information. Did a preliminary work integrating PAE matrix information for each protein to tune the PAE threshold to determine domain boundary, where merizo will eb doing teh first-pass. Basically, if average PAE score is low (e.g., \~3A) and merizo is showing 2 domains, they will be merged, and if merizo is showing 1 domaain but the PAE is \>12A, they will be separated.
+
+------------------------------------------------------------------------
+
+**Others**
+
+```bash 
+#| label: activating-virtual-env
+
+source /home/visnu/venvPyAnalysis/bin/activate
+```
