@@ -1,8 +1,15 @@
 ---
 title: "flexible-alignment"
-author: "Visnu Chowdhury"
+author: 
+  name: "Visnu Chowdhury"
+  affiliation: Schmitz Lab, University of Delaware, Newark, USA
+bibliography: bibliography.bib
+csl: nature.csl
 format: 
   html: 
+    theme: cosmo
+    code-summary: "Code"
+    highlight-style: github
     code-fold: true
     code-overflow: wrap
     fontsize: 0.9em
@@ -23,7 +30,11 @@ Here, flexible-alignment repository of the KRS lab is being cloned locally, to c
 
 Cloning should be done only once in the beginning. Listing out steps just to keep track.  
 
-```{bash}
+```bash
+#| label: setting-up-git-repo
+#| echo: true
+#| eval: false
+
 git clone https://github.com/krs-lab/flexible-alignment.git # run once
 cd flexible-alignment/
 git remote -v # shows all remote repos
@@ -42,7 +53,7 @@ I have generated some PDB files using `colabfold_batch` via BIOMIX for the 600-1
 
 Just adding the bash (or Python wrapped in bash) codes, which was run to check the validity of the PDBs. 
 
-```{bash}
+```bash
 # check if all PDBs based on FASTA inputs are accounted for
 python3 -c '
 import glob
@@ -140,4 +151,163 @@ ls *.pickle # remove raw .pickle files to save space
 
 ------------------------------
 
+**Rational domain segmentation with Merizo**
 
+Initially wanted to use PAE to isolate domains, but problem arises when 2 domains are connected with high confidence structures like $\alpha$-helix, or the overall protein has very low pLDDT score, not only at the disordered region. In the 1st case, I will likely get 1 domain, instead of 2, and the in the 2nd case I will probably get fragmented domains, meaning much higher number of domains instead of the true ones. 
+
+Therefore I wanted to try Merizo @lau2023merizo, which is fast, gives pretty accurate domain boundaries based on the 3D spatial packing.    
+
+Preliminary plan: get AF PDB+PAE $\rightarrow$ run merizo $\rightarrow$ run PAE-greedy $\rightarrow$ eval -ve, adj th $\rightarrow$ eval +ve, map CATH/SCOP w Adjusted Rand Index (ARI) $\rightarrow$ eval test cases
+
+```python
+#| label: fetch-alphafold-pdb-pae-w-python-from-csv-input
+
+#!/usr/bin/env python3
+"""
+Downloads PDB models and PAE JSON files from AlphaFold DB using UniProt IDs from a CSV file.
+Saves them in `pdb_pae/` renamed as <uniprot_id>.pdb and <uniprot_id>_pae.json.
+
+Usage:
+    python fetch_pdb_pae.py input.csv
+"""
+
+import csv
+import sys
+import time
+from pathlib import Path
+import requests
+
+ALPHAFOLD_API_URL = "https://alphafold.ebi.ac.uk/api/prediction/{uniprot_id}"
+OUT_DIR = Path("pdb_pae")
+REQUEST_DELAY = 0.15  # Politeness delay between API calls
+
+
+def fetch_alphafold_files(uniprot_id):
+    """Query AlphaFold API and download PDB + PAE JSON files."""
+    try:
+        resp = requests.get(ALPHAFOLD_API_URL.format(uniprot_id=uniprot_id), timeout=30)
+        if resp.status_code != 200 or not resp.json():
+            print(f"  [MISSING] No AlphaFold model found for: {uniprot_id}")
+            return False
+
+        data = resp.json()[0]  # Get primary prediction model
+        pdb_url = data.get("pdbUrl")
+        pae_url = data.get("paeDocUrl")
+
+        if not pdb_url:
+            print(f"  [WARN] Missing PDB URL for: {uniprot_id}")
+            return False
+
+        pdb_file = OUT_DIR / f"{uniprot_id}.pdb"
+        pae_file = OUT_DIR / f"{uniprot_id}_pae.json"
+
+        # Download PDB
+        if not pdb_file.exists():
+            pdb_resp = requests.get(pdb_url, timeout=30)
+            if pdb_resp.status_code == 200:
+                pdb_file.write_bytes(pdb_resp.content)
+
+        # Download PAE JSON
+        if pae_url and not pae_file.exists():
+            pae_resp = requests.get(pae_url, timeout=30)
+            if pae_resp.status_code == 200:
+                pae_file.write_bytes(pae_resp.content)
+
+        print(f"  [SUCCESS] Saved: {uniprot_id}.pdb & {uniprot_id}_pae.json")
+        return True
+
+    except Exception as e:
+        print(f"  [ERROR] Failed to download {uniprot_id}: {e}")
+        return False
+
+
+def main():
+    if len(sys.argv) < 2:
+        print("Usage: python fetch_pdb_pae.py <input_csv_file>")
+        sys.exit(1)
+
+    csv_path = Path(sys.argv[1])
+    if not csv_path.exists():
+        print(f"Error: File {csv_path} does not exist.")
+        sys.exit(1)
+
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+    # Read unique UniProt IDs from CSV
+    uniprot_ids = []
+    with open(csv_path, "r", encoding="utf-8") as fh:
+        reader = csv.DictReader(fh)
+        if "uniprot_ids" not in reader.fieldnames:
+            print("Error: Input CSV must contain a 'uniprot_ids' column.")
+            sys.exit(1)
+            
+        for row in reader:
+            uid = row["uniprot_ids"].strip()
+            if uid and uid not in uniprot_ids:
+                uniprot_ids.append(uid)
+
+    print(f"Found {len(uniprot_ids)} unique UniProt IDs. Starting downloads into '{OUT_DIR}/'...\n")
+
+    success_count = 0
+    for uid in uniprot_ids:
+        if fetch_alphafold_files(uid):
+            success_count += 1
+        time.sleep(REQUEST_DELAY)
+
+    print(f"\nFinished! Downloaded {success_count}/{len(uniprot_ids)} entries.")
+
+if __name__ == "__main__":
+    main()
+```
+
+```bash
+#| label: fetch-alphafold-pdb-pae-from-cli
+
+python3 fetch_pdb_pae.py targets_merizo_test.csv
+```
+
+```bash
+#| label: setting-up-merizo-on-KRSlab-WS2
+
+# create and activate conda env
+conda create -n merizo_env python=3.10 -y
+conda activate merizo_env
+
+# config env path
+export PATH="/home/krslab/.local/bin:$PATH" # adding local binary dir to path
+unset PYTHONNOUSERSITE # for python to read/write only to my user space
+
+# install dependencies into userspace
+python -m pip install --user torch torchvision --index-url https://download.pytorch.org/whl/cpu
+python -m pip install --user "numpy<2" einops matplotlib natsort networkx rotary-embedding-torch scipy setuptools
+
+# verify env
+python -c "import numpy, torch; print(numpy.__file__); print(torch.__file__)"
+# expected outputs
+# /home/krslab/.local/lib/python3.10/site-packages/numpy/__init__.py
+# /home/krslab/.local/lib/python3.10/site-packages/torch/__init__.py
+
+# clone merizo
+cd /fast_disk/visnu/merizo_work/ # where merizo is
+git clone https://github.com/Chattz/Merizo.git
+```
+
+```bash
+#| label: run-merizo
+
+# run merizo
+python Merizo/predict.py -d cpu -i /path/to/pdb_files/*.pdb --iterate --save_domains > merizo_results.tsv
+```
+
+```bash
+#| label: check-merizo-results
+
+# sanity check > run from where the segmented domains are 
+for d in *.domains; do echo "=== $d ==="; cat "$d"; echo ""; done
+# outputs 
+# === P00558_merizo_v2.domains ===
+# P00558_merizo_v2        1       181     0.746   97.563  1       7-187
+# P00558_merizo_v2        2       193     1.000   96.409  2       199-391
+```
+
+Tested with 2 positive and 2 negative control proteins and 3 test proteins. Merizo results did not match with the CATH db information. Did a preliminary work integrating PAE matrix information for each protein to tune the PAE threshold to determine domain boundary, where merizo will eb doing teh first-pass. Basically, if average PAE score is low (e.g., ~3A) and merizo is showing 2 domains, they will be merged, and if merizo is showing 1 domaain but the PAE is >12A, they will be separated. 
