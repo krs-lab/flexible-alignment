@@ -20,7 +20,7 @@ execute:
 
 ------------------------------------------------------------------------
 
-This is a Quarto Markdown (.qmd) file, similar to the R Markdown (.Rmd) file - just multi-language. The plan is to add instructions of what is being done, why, and how, to ensure reproducibility. For the latest codes please check the code files directly.  
+This is a Quarto Markdown (.qmd) file, similar to the R Markdown (.Rmd) file - just multi-language. The plan is to add instructions of what is being done, why, and how, to ensure reproducibility. To run .qmd, simply open it on RStudio, and check render on save. For the latest codes please check the code files directly.  
 
 ------------------------------------------------------------------------
 
