@@ -49,14 +49,147 @@ git mv old_name.py new_name.py # commit & push as before
 
 ------------------------------------------------------------------------
 
-**Sanity checks after PDB file generation**
+**PDB generation: colabfold_batch on BIOMIX: Sanity checks** 
 
-I have generated some PDB files using `colabfold_batch` via BIOMIX for the 600-1000aa long sequences, the GenBank IDs of which could not be matched to the UniProt accession IDs even after BLASTp, ran locally. I am adding some codes here that will let do some sanity checks.
+To generate PDB from amino acid sequences, at a high level, ColabFold uses MMseqs2 to query databases. UniRef30 is used to build the core MSA to capture the sequence diversity from close to moderately distant homologs, while ColabFoldDB that combines UniRef30 and environmental sequences is used to capture additional distant relatives and metagenomic sequences, to determine evolutionary conservation and co-evolutionary signals across related sequences. These sequences and MSA are converted into features for each individual residue (1D) and also for every residue pair (2D) to model potential spatial interactions. AlphaFold2/ColabFold passes these features/vectors (math tensors) through multiple layers of neurons (Evoformer layers) to exchange information iteratively between MSA-based evolutionary relationship and spatial hypothesis, which is transformed by positioning the backbone and twisting teh side chanins into physical 3D space to predict atomic coordinates that is saved into standard PDB/mmCIF files.
+
+This MSA can be done locally through `colabfold_search` if the databases (~1TB) are installed, or remotely via `colabfold_batch` by connecting to public servers, which I have been doing so far. To do that, I used 2 scripts, one to automate the task `batch_biomix.sh` and the other `submit_biomix.slurm` to reserve the hardware and set up the execution environment in a HPC cluster. 
+
+``` bash
+#| label: batch-script-to-automate-task-sh
+#| echo: true
+#| eval: false
+
+#!/bin/bash
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+INPUT_DIR="$SCRIPT_DIR"
+OUTPUT_DIR="$SCRIPT_DIR/output"
+TEMP_FASTA_DIR="$SCRIPT_DIR/.tmp_single_fastas"
+LOG_FILE="$SCRIPT_DIR/colabfold_biomix_run.log"
+
+export PATH="/home/pritom/schmitzLab/main/pipBinders/colabfold/localcolabfold/.pixi/envs/default/bin:$PATH"
+
+# Clean and recreate temporary directory safely
+rm -rf "$TEMP_FASTA_DIR"
+mkdir -p "$OUTPUT_DIR" "$TEMP_FASTA_DIR"
+
+echo "==========================================" | tee -a "$LOG_FILE"
+echo "Starting ColabFold batch on BIOMIX at $(date)" | tee -a "$LOG_FILE"
+echo "==========================================" | tee -a "$LOG_FILE"
+
+echo "Splitting multi-FASTA sequences into single FASTA files..." | tee -a "$LOG_FILE"
+
+# Parse multi-FASTA files and split into individual FASTA files
+for ffile in "$INPUT_DIR"/*.fasta "$INPUT_DIR"/*.fa "$INPUT_DIR"/*.fas; do
+    [ -e "$ffile" ] || continue
+    awk -v outdir="$TEMP_FASTA_DIR" '
+        /^>/ {
+            split($1, a, ">");
+            seq_id = a[2];
+            gsub(/[[:space:]\r\n]/, "", seq_id);
+            outfile = outdir "/" seq_id ".fasta";
+            print $0 > outfile;
+            next;
+        }
+        {
+            if (outfile != "") {
+                print $0 >> outfile;
+            }
+        }
+    ' "$ffile"
+done
+
+# Check if any fasta files were actually generated before running ColabFold
+count=$(ls -1 "$TEMP_FASTA_DIR"/*.fasta 2>/dev/null | wc -l)
+if [ "$count" -eq 0 ]; then
+    echo "ERROR: No single FASTA files were generated in $TEMP_FASTA_DIR" | tee -a "$LOG_FILE"
+    exit 1
+fi
+
+echo "Generated $count single FASTA files. Running colabfold_batch..." | tee -a "$LOG_FILE"
+
+# Run colabfold_batch on split sequence files
+cd "$TEMP_FASTA_DIR" || exit 1
+colabfold_batch . "$OUTPUT_DIR" --max-msa 256:512 --save-all >> "$LOG_FILE" 2>&1
+
+echo "Processing output files in $OUTPUT_DIR..." | tee -a "$LOG_FILE"
+
+# Safely rename top-ranked PDB files to <GenBank_ID>.pdb inside output/
+# 	1st iteration: renames unrelaxed to gb_id.pdb
+# 	2nd iteration: renames relaxed to gb_id.pdb
+for unrelaxed_pdb in "$OUTPUT_DIR"/*_unrelaxed_rank_001_*.pdb; do
+    [ -f "$unrelaxed_pdb" ] || continue
+
+    filename=$(basename "$unrelaxed_pdb")
+    genbank_id="${filename%%_unrelaxed*}"
+
+    # Check if a corresponding relaxed file exists
+    relaxed_pdb=$(ls "$OUTPUT_DIR"/${genbank_id}_relaxed_rank_001_*.pdb 2>/dev/null | head -n 1)
+
+    if [ -f "$relaxed_pdb" ]; then
+        target_pdb="$relaxed_pdb"
+    else
+        target_pdb="$unrelaxed_pdb"
+    fi
+
+    mv "$target_pdb" "$OUTPUT_DIR/${genbank_id}.pdb"
+    echo "Renamed $(basename "$target_pdb") -> ${genbank_id}.pdb" >> "$LOG_FILE"
+done
+
+# Clean up rank 2-5 models and temporary split fastas
+rm -f "$OUTPUT_DIR"/*_rank_00[2-5]_*.pdb
+rm -rf "$TEMP_FASTA_DIR"
+
+echo "Finished processing at $(date)" | tee -a "$LOG_FILE"
+```
+
+``` bash
+#| label: env-setup-in-hpc-slurm
+#| echo: true
+#| eval: false
+
+#!/bin/bash
+#SBATCH --job-name=colabfold_multifasta
+#SBATCH --partition=gpu
+#SBATCH --qos=gpu
+#SBATCH --gres=gpu:1
+#SBATCH --nodelist=biomix64,biomix66,biomix61,biomix62,biomix63,biomix65,biomix67,biomix68,biomix70
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=64G
+#SBATCH --time=48:00:00
+#SBATCH --output=slurm_%j.log
+#SBATCH --error=slurm_%j.err
+
+set -e
+
+chmod +x ./batch_biomix.sh
+./batch_biomix.sh
+```
+
+``` bash
+#| label: submit-job-to-hpc-cli
+#| echo: true
+#| eval: false
+
+sbatch submit_biomix.slurm
+
+# check run status
+squeue -u $USER # your user name should be running jobs
+tail -f colabfold_biomix_run.log # will show live output
+```
+
+I have generated some PDB files using `colabfold_batch` via BIOMIX for the 600-1000 aa long sequences, the GenBank IDs of which could not be matched to the UniProt accession IDs even after BLASTp, ran locally. 
+
+I am adding some codes here that will let do some sanity checks.
 
 Just adding the bash (or Python wrapped in bash) codes, which was run to check the validity of the PDBs.
 
 ``` bash
-# check if all PDBs based on FASTA inputs are accounted for
+#| label: account-pdbs-for-each-fasta-cli
+#| echo: true
+#| eval: false
+
 python3 -c '
 import glob
 import os
@@ -98,11 +231,15 @@ if missing:
 else:
     print("SUCCESS: All expected PDB files are accounted for!\n")
 '
+```
 
-# ---
-cd output/ # go to "ourput" dir  
+``` bash
+#| label: check-atom-nums-erros-in-pdbs-cli
+#| echo: true
+#| eval: false
 
-# --- 
+cd output/ # from right outside of pdb container  
+
 # checking atom nums, should not be 0, or ending w errors
 for f in *.pdb; 
 do echo -n "$f: "; 
@@ -110,9 +247,13 @@ do echo -n "$f: ";
   echo -n "atoms | Last line: "; tail -n 1 "$f"; 
 done
 echo
+```
 
-# --- 
-# check pLDDT score of each 
+``` bash
+#| label: check-plddt-score-each-pdb-cli
+#| echo: true
+#| eval: false
+
 python3 -c '
 import glob
 import os
@@ -144,8 +285,13 @@ if lines:
         out_f.write("\n".join(lines) + "\n")
     print(f"Done. Processed {len(lines)} files. Summary saved to {output_file}\n")
 '
+```
 
-# ---
+```bash
+#| label: check-remove-pickles
+#| echo: true
+#| eval: false
+
 du -sh ../output/ # check disk usage
 ls *.pickle # remove raw .pickle files to save space 
 ```
@@ -318,7 +464,7 @@ Tested with 2 positive and 2 negative control proteins and 3 test proteins. Meri
 **Others**
 
 ```bash 
-#| label: activating-virtual-env
+#| label: activate-virtual-env
 
 source /home/visnu/venvPyAnalysis/bin/activate
 ```

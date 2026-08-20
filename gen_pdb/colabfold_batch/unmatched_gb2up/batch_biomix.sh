@@ -53,18 +53,26 @@ colabfold_batch . "$OUTPUT_DIR" --max-msa 256:512 --save-all >> "$LOG_FILE" 2>&1
 
 echo "Processing output files in $OUTPUT_DIR..." | tee -a "$LOG_FILE"
 
-# Safely rename rank_001 PDB files to <GenBank_ID>.pdb inside output/
-for pdb in "$OUTPUT_DIR"/*_unrelaxed_rank_001_*.pdb "$OUTPUT_DIR"/*_relaxed_rank_001_*.pdb; do
-    if [ -f "$pdb" ]; then
-        filename=$(basename "$pdb")
-        
-        # Strip starting from '_unrelaxed' or '_relaxed' to keep full RefSeq/GenBank IDs intact
-        genbank_id="${filename%%_unrelaxed*}"
-        genbank_id="${genbank_id%%_relaxed*}"
-        
-        mv "$pdb" "$OUTPUT_DIR/${genbank_id}.pdb"
-        echo "Renamed $filename -> ${genbank_id}.pdb" >> "$LOG_FILE"
+# Safely rename top-ranked PDB files to <GenBank_ID>.pdb inside output/
+# 	1st iteration: renames unrelaxed to gb_id.pdb
+# 	2nd iteration: renames relaxed to gb_id.pdb
+for unrelaxed_pdb in "$OUTPUT_DIR"/*_unrelaxed_rank_001_*.pdb; do
+    [ -f "$unrelaxed_pdb" ] || continue
+
+    filename=$(basename "$unrelaxed_pdb")
+    genbank_id="${filename%%_unrelaxed*}"
+
+    # Check if a corresponding relaxed file exists
+    relaxed_pdb=$(ls "$OUTPUT_DIR"/${genbank_id}_relaxed_rank_001_*.pdb 2>/dev/null | head -n 1)
+
+    if [ -f "$relaxed_pdb" ]; then
+        target_pdb="$relaxed_pdb"
+    else
+        target_pdb="$unrelaxed_pdb"
     fi
+
+    mv "$target_pdb" "$OUTPUT_DIR/${genbank_id}.pdb"
+    echo "Renamed $(basename "$target_pdb") -> ${genbank_id}.pdb" >> "$LOG_FILE"
 done
 
 # Clean up rank 2-5 models and temporary split fastas
