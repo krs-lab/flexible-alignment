@@ -18,9 +18,9 @@ execute:
   echo: true
 ---
 
-------------------------------------------------------------------------
+<hr style="height: 4px; background-color: black; border: none;">
 
-This is a Quarto Markdown (.qmd) file, similar to the R Markdown (.Rmd) file - just multi-language. The plan is to add instructions of what is being done, why, and how, to ensure reproducibility. To run .qmd, simply open it on RStudio, and check render on save. For the latest codes please check the code files directly.  
+This is a Quarto Markdown (.qmd) file, similar to the R Markdown (.Rmd) file - just multi-language. The plan is to add instructions of what is being done, why, and how, to ensure reproducibility. To see the formatted output, get the .qmd file, open it in RStudio, and check "render on save", and save. For the latest codes please check the code files directly.
 
 ------------------------------------------------------------------------
 
@@ -49,11 +49,17 @@ git mv old_name.py new_name.py # commit & push as before
 
 ------------------------------------------------------------------------
 
-**PDB generation: colabfold_batch on BIOMIX** 
+<hr style="height: 4px; background-color: black; border: none;">
+
+## PDB generation on BIOMIX
 
 To generate PDB from amino acid sequences, at a high level, ColabFold uses MMseqs2 to query databases. UniRef30 is used to build the core MSA to capture the sequence diversity from close to moderately distant homologs, while ColabFoldDB that combines UniRef30 and environmental sequences is used to capture additional distant relatives and metagenomic sequences, to determine evolutionary conservation and co-evolutionary signals across related sequences. These sequences and MSA are converted into features for each individual residue (1D) and also for every residue pair (2D) to model potential spatial interactions. AlphaFold2/ColabFold passes these features/vectors (math tensors) through multiple layers of neurons (Evoformer layers) to exchange information iteratively between MSA-based evolutionary relationship and spatial hypothesis, which is transformed by positioning the backbone and twisting teh side chanins into physical 3D space to predict atomic coordinates that is saved into standard PDB/mmCIF files.
 
-This MSA can be done locally through `colabfold_search` if the databases (~1TB) are installed, or remotely via `colabfold_batch` by connecting to public servers, which I have been doing so far. To do that, I used 2 scripts, one to automate the task `batch_biomix.sh` and the other `submit_biomix.slurm` to reserve the hardware and set up the execution environment in a HPC cluster. 
+This MSA can be done locally through `colabfold_search` if the databases (\~1TB) are installed, or remotely via `colabfold_batch` by connecting to public servers, which I have been doing so far.
+
+### colabfold_batch
+
+To use `colabfold_batch`, I used 2 scripts, one to automate the task `batch_biomix.sh` and the other `submit_biomix.slurm` to reserve the hardware and set up the execution environment in a HPC cluster.
 
 ``` bash
 #| label: batch-script-to-automate-task-sh
@@ -116,8 +122,8 @@ colabfold_batch . "$OUTPUT_DIR" --max-msa 256:512 --save-all >> "$LOG_FILE" 2>&1
 echo "Processing output files in $OUTPUT_DIR..." | tee -a "$LOG_FILE"
 
 # Safely rename top-ranked PDB files to <GenBank_ID>.pdb inside output/
-# 	1st iteration: renames unrelaxed to gb_id.pdb
-# 	2nd iteration: renames relaxed to gb_id.pdb
+#   1st iteration: renames unrelaxed to gb_id.pdb
+#   2nd iteration: renames relaxed to gb_id.pdb
 for unrelaxed_pdb in "$OUTPUT_DIR"/*_unrelaxed_rank_001_*.pdb; do
     [ -f "$unrelaxed_pdb" ] || continue
 
@@ -179,9 +185,103 @@ squeue -u $USER # your user name should be running jobs
 tail -f colabfold_biomix_run.log # will show live output
 ```
 
-**Sanity checks**
+### colabfold_search
 
-I have generated some PDB files using `colabfold_batch` via BIOMIX for the 600-1000 aa long sequences, the GenBank IDs of which could not be matched to the UniProt accession IDs even after BLASTp, ran locally. 
+The databases for colabfold_search are set up at `/mnt/dbases/colabfold_db` with read/execute permission to the BIOMIX users. 
+
+Modified the batch script to do MSA. 
+
+``` bash
+#| label: msa-script-to-automate-task-sh
+
+#!/bin/bash
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+INPUT_DIR="$SCRIPT_DIR"
+OUTPUT_DIR="$SCRIPT_DIR/msa_output"
+TEMP_FASTA_DIR="$SCRIPT_DIR/.tmp_single_fastas"
+LOG_FILE="$SCRIPT_DIR/colabfold_search_biomix.log"
+
+export PATH="/home/pritom/schmitzLab/main/pipBinders/colabfold/localcolabfold/.pixi/envs/default/bin:$PATH"
+export MMSEQS_IGNORE_INDEX=1
+
+# Clean and recreate temporary directories
+rm -rf "$TEMP_FASTA_DIR"
+mkdir -p "$OUTPUT_DIR" "$TEMP_FASTA_DIR"
+
+echo "==========================================" | tee -a "$LOG_FILE"
+echo "Starting ColabFold MSA search on BIOMIX at $(date)" | tee -a "$LOG_FILE"
+echo "==========================================" | tee -a "$LOG_FILE"
+
+echo "Splitting multi-FASTA sequences into single FASTA files..." | tee -a "$LOG_FILE"
+
+# Parse multi-FASTA files and split into individual FASTA files
+for ffile in "$INPUT_DIR"/*.fasta "$INPUT_DIR"/*.fa "$INPUT_DIR"/*.fas; do
+    [ -e "$ffile" ] || continue
+    awk -v outdir="$TEMP_FASTA_DIR" '
+        /^>/ {
+            split($1, a, ">");
+            seq_id = a[2];
+            gsub(/[[:space:]\r\n]/, "", seq_id);
+            outfile = outdir "/" seq_id ".fasta";
+            print $0 > outfile;
+            next;
+        }
+        {
+            if (outfile != "") {
+                print $0 >> outfile;
+            }
+        }
+    ' "$ffile"
+done
+
+count=$(ls -1 "$TEMP_FASTA_DIR"/*.fasta 2>/dev/null | wc -l)
+if [ "$count" -eq 0 ]; then
+    echo "ERROR: No single FASTA files were generated in $TEMP_FASTA_DIR" | tee -a "$LOG_FILE"
+    exit 1
+fi
+
+echo "Generated $count single FASTA files. Running colabfold_search..." | tee -a "$LOG_FILE"
+
+# Run colabfold_search across all split fastas against the system database
+colabfold_search \
+    "$TEMP_FASTA_DIR" \
+    /mnt/dbases/colabfold_db \
+    "$OUTPUT_DIR" >> "$LOG_FILE" 2>&1
+
+# Clean up temporary split fastas
+rm -rf "$TEMP_FASTA_DIR"
+
+echo "MSA generation complete. Outputs saved in $OUTPUT_DIR" | tee -a "$LOG_FILE"
+echo "Finished processing at $(date)" | tee -a "$LOG_FILE"
+```
+
+Also modified the slurm script to use sufficient amount of RAM ($\gt{177}$ GB) and only CPU usage for this process. Using more cores (e.g., 64) if available saves time. 
+
+``` bash
+#| label: msa-script-to-automate-task-sh
+
+#!/bin/bash
+#SBATCH --job-name=colabfold_multifasta_msa
+##SBATCH --partition=batch
+#SBATCH --nodes=1
+#SBATCH --cpus-per-task=64
+#SBATCH --mem=200G
+#SBATCH --time=48:00:00
+#SBATCH --output=slurm_%j.log
+#SBATCH --error=slurm_%j.err
+
+set -e
+set -x
+
+chmod +x ./msa_biomix.sh
+./msa_biomix.sh
+```
+
+
+### Sanity checks
+
+I have generated some PDB files using `colabfold_batch` via BIOMIX for the 600-1000 aa long sequences, the GenBank IDs of which could not be matched to the UniProt accession IDs even after BLASTp, ran locally.
 
 I am adding some codes here that will let do some sanity checks.
 
@@ -289,7 +389,7 @@ if lines:
 '
 ```
 
-```bash
+``` bash
 #| label: check-remove-pickles
 #| echo: true
 #| eval: false
@@ -300,9 +400,13 @@ ls *.pickle # remove raw .pickle files to save space
 
 ------------------------------------------------------------------------
 
-**Rational domain segmentation with Merizo**
+<hr style="height: 4px; background-color: black; border: none;">
 
-Initially wanted to use PAE to isolate domains, but problem arises when 2 domains are connected with high confidence structures like $\alpha$-helix, or the overall protein has very low pLDDT score, not only at the disordered region. In the 1st case, I will likely get 1 domain, instead of 2, and the in the 2nd case I will probably get fragmented domains, meaning much higher number of domains instead of the true ones.
+## Rational domain segmentation
+
+### Merizo: 1<sup>st</sup> pass
+
+Initially wanted to use PAE to isolate domains, but problem arises when 2 domains are connected with high confidence structures like $\alpha$\$\\alpha\$-helix, or the overall protein has very low pLDDT score, not only at the disordered region. In the 1st case, I will likely get 1 domain, instead of 2, and the in the 2nd case I will probably get fragmented domains, meaning much higher number of domains instead of the true ones.
 
 Therefore I wanted to try Merizo @lau2023merizo, which is fast, gives pretty accurate domain boundaries based on the 3D spatial packing.
 
@@ -466,7 +570,9 @@ for d in *.domains; do echo "=== $d ==="; cat "$d"; echo ""; done
 # P00558_merizo_v2        2       193     1.000   96.409  2       199-391
 ```
 
-Tested with 2 positive and 2 negative control proteins and 3 test proteins. Merizo results did not match with the [CATH](https://www.cathdb.info/) database information obtained through [SCOP-e](https://www.rcsb.org/docs/search-and-browse/browse-options/scop-e). Using PAE threshold to refine domain boundary, seems to work to some extent. Basically, if average PAE score is low (e.g., \~2.6A) and merizo is showing 2 domains, they will be merged, and if merizo is showing 1 domain but the PAE is \>12A, they will be separated if the domains are available. 
+### PAE: 2<sup>nd</sup> pass
+
+Tested with 2 positive and 2 negative control proteins and 3 test proteins. Merizo results did not match with the [CATH](https://www.cathdb.info/) database information obtained through [SCOP-e](https://www.rcsb.org/docs/search-and-browse/browse-options/scop-e). Using PAE threshold to refine domain boundary, seems to work to some extent. Basically, if average PAE score is low (e.g., \~2.6A) and merizo is showing 2 domains, they will be merged, and if merizo is showing 1 domain but the PAE is \>12A, they will be separated if the domains are available.
 
 ``` python
 #| label: pae-based-domain-refinement-python
@@ -475,8 +581,8 @@ Tested with 2 positive and 2 negative control proteins and 3 test proteins. Meri
 To refine merizo domain segmentation outputs with PAE 
 
 Usage: 
-        python3 refine_domains_6.py
-        python3 refine_domains_6.py /path/to/pdb/pae/input_dir
+        python3 refine_domains.py
+        python3 refine_domains.py /path/to/pdb/pae/input_dir
 """
 
 #!/usr/bin/env python3
@@ -615,7 +721,7 @@ if __name__ == "__main__":
     main()
 ```
 
-```bash 
+``` bash
 #| label: calling-pae-script-cli
 
 python3 refine_domains_w_pae.py /path/to/pdb_pae 
@@ -623,9 +729,11 @@ python3 refine_domains_w_pae.py /path/to/pdb_pae
 
 ------------------------------------------------------------------------
 
+<hr style="height: 4px; background-color: black; border: none;">
+
 **Others**
 
-```bash 
+``` bash
 #| label: activate-virtual-env
 
 source /home/visnu/venvPyAnalysis/bin/activate
