@@ -188,9 +188,9 @@ tail -f colabfold_biomix_run.log # will show live output
 
 ### colabfold_search
 
-The databases for colabfold_search are set up at `/mnt/dbases/colabfold_db` with read/execute permission to the BIOMIX users. 
+The databases for colabfold_search are set up at `/mnt/dbases/colabfold_db` with read/execute permission to the BIOMIX users.
 
-Modified the batch script to do MSA. 
+Modified the batch script to do MSA.
 
 ``` bash
 #| label: msa-script-to-automate-task-sh
@@ -257,7 +257,7 @@ echo "MSA generation complete. Outputs saved in $OUTPUT_DIR" | tee -a "$LOG_FILE
 echo "Finished processing at $(date)" | tee -a "$LOG_FILE"
 ```
 
-Also modified the slurm script to use sufficient amount of RAM ($\gt{177}$ GB) and only CPU usage for this process. Using more cores (e.g., 64) if available saves time. 
+Also modified the slurm script to use sufficient amount of RAM ($\gt{177}$ GB) and only CPU usage for this process. Using more cores (e.g., 64) if available saves time.
 
 ``` bash
 #| label: msa-script-to-automate-task-sh
@@ -279,8 +279,7 @@ chmod +x ./msa_biomix.sh
 ./msa_biomix.sh
 ```
 
-
-### Sanity checks
+### Quality checks
 
 I have generated some PDB files using `colabfold_batch` via BIOMIX for the 600-1000 aa long sequences, the GenBank IDs of which could not be matched to the UniProt accession IDs even after BLASTp, ran locally.
 
@@ -288,7 +287,7 @@ I am adding some codes here that will let do some sanity checks.
 
 Just adding the bash (or Python wrapped in bash) codes, which was run to check the validity of the PDBs.
 
-Checking if all PDBs are accounted for each FASTA seq input. 
+- Checking if all PDBs are accounted for each FASTA seq input.
 
 ``` bash
 #| label: account-pdbs-for-each-fasta-cli
@@ -338,7 +337,7 @@ else:
 '
 ```
 
-Checking if there are any errors in the atom numbers. Corrupted files will show outputs like, 0 atoms
+- Checking if there are any errors in the atom numbers. Corrupted files will show outputs like, 0 atoms
 
 ``` bash
 #| label: check-atom-nums-erros-in-pdbs-cli
@@ -356,7 +355,7 @@ done
 echo
 ```
 
-Checking the pLDDT scores which indicated the confidence of proteins' local pieces. 
+- Checking the pLDDT scores which indicated the confidence of proteins' local pieces.
 
 ``` bash
 #| label: check-plddt-score-each-pdb-cli
@@ -396,7 +395,7 @@ if lines:
 '
 ```
 
-```bash
+``` bash
 #| label: check-ptm-scores-cli 
 
 python3 -c '
@@ -427,9 +426,11 @@ if lines:
 '
 ```
 
-Checking if the files are valid, fit for later use. Basically, checking for file size, which should be non-zero `os.path.getsize(pdb) == 0`; scans for texts like not a number or infinite coordinate entries indicating calculation failure; looks for alpha-carbon, if missing `ca_count == 0`, the file is empty, malformed, or missing standard coordinates; and finally looks for `END` with `has_end` which indicates proper termination.      
+- Checking if the files are valid, fit for later use.
 
-```bash
+Basically, checking for file size, which should be non-zero `os.path.getsize(pdb) == 0`; scans for texts like not a number or infinite coordinate entries indicating calculation failure; looks for alpha-carbon, if missing `ca_count == 0`, the file is empty, malformed, or missing standard coordinates; and finally looks for `END` with `has_end` which indicates proper termination.
+
+``` bash
 #| label: file-validity-checks-cli 
 
 python3 -c '
@@ -442,15 +443,25 @@ for pdb in sorted(glob.glob("*.pdb")):
     filename = os.path.basename(pdb)
     
     # Check 1: File size
-    if os.path.getsize(pdb) == 0:
-        print(f"FAILED (Empty File): {filename}")
-        corrupted.append(filename)
-        continue
+    bytes_size = os.path.getsize(pdb)
+    if bytes_size >= 1024 * 1024:
+        size_str = f"{bytes_size / (1024*1024):.2f} MB"
+    else:
+        size_str = f"{bytes_size / 1024:.1f} KB"
         
+    chk_size = f"PASS ({size_str})" if bytes_size > 0 else "FAIL (0 B)"
+    
+    if bytes_size == 0:
+        chk_atoms = "FAIL (Empty)"
+        chk_end = "FAIL (Empty)"
+        corrupted.append(filename)
+        print(f"{filename:45s} | Size: {chk_size:15s} | Atoms/Coords: {chk_atoms:15s} | END Record: {chk_end} | Status: FAILED")
+        continue
+
     has_end = False
     ca_count = 0
     has_nan = False
-    
+
     with open(pdb, "r") as f:
         for line in f:
             if "NaN" in line or "Inf" in line:
@@ -459,21 +470,37 @@ for pdb in sorted(glob.glob("*.pdb")):
                 ca_count += 1
             if line.startswith("END"):
                 has_end = True
-                
-    # Check 2: Content integrity
+
+    # Check 2: Atom content and numeric validity
+    if ca_count > 0 and not has_nan:
+        chk_atoms = f"PASS ({ca_count} CAs)"
+    elif has_nan:
+        chk_atoms = "FAIL (NaN/Inf)"
+    else:
+        chk_atoms = "FAIL (0 CAs)"
+
+    # Check 3: END record
+    chk_end = "PASS" if has_end else "WARN (Missing)"
+
+    # Overall file status
     if ca_count == 0 or has_nan:
-        print(f"FAILED (Missing/Bad Atoms): {filename}")
+        status = "FAILED"
         corrupted.append(filename)
     elif not has_end:
-        print(f"WARNING (Truncated/No END record): {filename}")
+        status = "WARNING"
     else:
+        status = "VALID"
         valid_count += 1
+
+    print(f"{filename:45s} | Size: {chk_size:15s} | Atoms/Coords: {chk_atoms:15s} | END Record: {chk_end:14s} | Status: {status}")
 
 print(f"\nSanity Check Complete: {valid_count} Valid | {len(corrupted)} Corrupted")
 '
 ```
 
-Checking for raw pickle files. These are massive. If they are not needed, removing saves space. 
+- Checking for raw pickle files.
+
+These are massive numerical raw data behind those PDB/PAE models. As I am not re-analyzing the raw internal representations, or recomputing the features, I am deleting them to save space.
 
 ``` bash
 #| label: check-remove-pickles
@@ -489,7 +516,13 @@ ls *.pickle # remove raw .pickle files to save space
 
 <hr style="height: 4px; background-color: black; border: none;">
 
-## Rational domain segmentation
+## Domain segmentation
+
+### PAE only
+
+Used PEA to segment the domains as it is generated with every PDB file, and does not require any additional tool.
+
+------------------------------------------------------------------------
 
 ### Merizo: 1<sup>st</sup> pass
 
