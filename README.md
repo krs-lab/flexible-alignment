@@ -7,7 +7,7 @@ Computaitonally screening for PIP-binding domains across *Legionella pneumophila
 - Get the latest **AlphaFold models** with their corresponding PAE (predicted alignemnt error) files (.pdb + .json) with `fetch_pdb_pae.py`. 
     - If needed convert the pdb/pae files' IDs into UniProt or Locus IDs with `convert_ids_uniprot_locus.py`
 
-#### Commands
+### Commands
 
 ```bash
 # get pdb/pae files 
