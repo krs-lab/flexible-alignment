@@ -532,6 +532,8 @@ Therefore I wanted to try Merizo @lau2023merizo, which is fast, gives pretty acc
 
 Preliminary plan: get AF PDB+PAE $\rightarrow$ run merizo $\rightarrow$ run PAE-greedy $\rightarrow$ eval -ve, adj th $\rightarrow$ eval +ve, map CATH/SCOP w Adjusted Rand Index (ARI) $\rightarrow$ eval test cases
 
+- getting PDB/PAE files from .csv input
+
 ``` python
 #| label: fetch-alphafold-pdb-pae-from-csv-input-python
 
