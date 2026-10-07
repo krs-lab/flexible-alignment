@@ -4,8 +4,8 @@ Downloads PDB models and PAE JSON files from AlphaFold DB using UniProt IDs from
 Saves them in `pdb_pae/` named using the locus tag/name (e.g., lpg0140.pdb) or UniProt ID if locus is missing.
 
 Usage:
-    python fetch_pdb_pae_v1.py -i input.csv
-    python fetch_pdb_pae_v1.py --input input.csv
+    python fetch_pdb_pae.py -i input.csv
+    python fetch_pdb_pae.py --input input.csv
 """
 
 import argparse
