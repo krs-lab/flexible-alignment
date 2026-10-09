@@ -1,0 +1,58 @@
+uniprot_id,protein,locus_id,alias,start_res,end_res,species,pip_target,fold_desc,domain,source,notes,function
+Q5ZYG7,Lpg0405,lpg0405,,1,174,lpn,PI(3)P,,,Bolt 2026,from fig ,
+Q5ZXN5,Lpg0696,lpg0696,Lem3,407,570,lpn,PI(3)P,7 alpha-helix,,Bolt 2026,,"Dephosphocholinates Rab1, removing AnkX modification"
+Q5ZXJ8,Lpg0733,lpg0733,RavH,1,158,lpn,PI(3)P,5 alpha-helix bundle,,Bolt 2026,,
+Q5ZX12,Lpg0921,lpg0921,MavT,309,402,lpn,PI(3)P,4 alpha-helix bundle,,Bolt 2026,,
+Q5ZWX1,Lpg0963,lpg0963,,1,186,lpn,PI(3)P,Lpg1851 fold,,Bolt 2026,,
+Q5ZWG1,Lpg1124,lpg1124,,1,179,lpn,PI(3)P,,,Bolt 2026,from fig ,
+Q5ZV40,Lpg1602,lpg1602,LegL2,1,428,lpn,PI(3)P,Leucine-rich repeat,,Bolt 2026,from fig ,
+Q5ZUP2,Lpg1751,lpg1751,,43,255,lpn,PI(3)P,Lpg1851 fold,,Bolt 2026,,
+Q5ZUK0,Lpg1798,lpg1798,MavU,221,336,lpn,PI(3)P,2 alpha-helix anti-parallel,,Bolt 2026,,
+Q5ZUE7,Lpg1851,lpg1851,Lem14,1,197,lpn,PI(3)P,Small all α-helical protein,,Bolt 2026,,"Synergistic with effector protein SidP, a PI3-phosphatase"
+Q5ZU98,Lpg1909,lpg1909,DenR,216,331,lpn,PI(3)P,4 alpha-helix bundle,,Bolt 2026,,Recruits nRas to LCV resulting in reduced MAPK signaling
+Q5ZU61,Lpg1947,lpg1947,Lem16,1,248,lpn,PI(3)P,,,Bolt 2026,from fig ,
+Q5ZU59,Lpg1949,lpg1949,Lem17,328,446,lpn,PI(3)P,3 alpha-helix,,Bolt 2026,,Possesses acetyltransferase activity
+Q5ZU50,Lpg1958,lpg1958,LegL5,1,534,lpn,PI(4)P PI(5)P PS,Leucine-rich repeat,,Bolt 2026,from fig ,
+Q5ZU48,Lpg1960,lpg1960,LirA,1,257,lpn,PI(3)P,,,Bolt 2026,from fig ,
+Q5ZU45,Lpg1963,lpg1963,PieA,361,499,lpn,PI(3)P,4 alpha-helix bundle,,Bolt 2026,,Localizes to LCV and disrupts lysosome morphology; on island of genomic plasticity
+Q5ZU43,Lpg1965,lpg1965,PieC,1,389,lpn,PI(3)P,,,Bolt 2026,,On island of genomic plasticity
+Q5ZU42,Lpg1966,lpg1966,PieD,1,250,lpn,PI(3)P,,,Bolt 2026,,On island of genomic plasticity
+Q5ZTN3,Lpg2128,lpg2128,,1,220,lpn,PI(3)P,,,Bolt 2026,from fig ,
+Q5ZTL8,Lpg2143,lpg2143,,1,126,lpn,PI(3)P,,,Bolt 2026,from fig ,
+Q5ZTK8,Lpg2153,lpg2153,SdeC,902,1121,lpn,PI(3)P,10 alpha-helix bundle,,Bolt 2026,,Phosphoribosyl ubiquitination of host proteins including Rtn4 resulting in ER rearrangement
+Q5ZSY1,Lpg2385,lpg2385,,312,447,lpn,"PI(3)P PI(3,5)P2",5 alpha-helix bundle,,Bolt 2026,,
+Q5ZSV5,Lpg2411,lpg2411,Lem24,1,275,lpn,PI(3)P,,,Bolt 2026,from fig ,
+Q5ZSU4,Lpg2422,lpg2422,Lem25,427,510,lpn,PI(3)P PS,4 alpha-helix bundle,,Bolt 2026,from fig ,
+Q5ZSJ8,Lpg2519,lpg2519,,1,186,lpn,PI(3)P PI(5)P,2 alpha-helix anti-parallel,,Bolt 2026,from fig ,
+Q5ZSJ4,Lpg2523,lpg2523,Lem26,347,479,lpn,PI(3)P,4 alpha-helix bundle,,Bolt 2026,,
+Q5ZSJ0,Lpg2527,lpg2527,LnaB,348,479,lpn,PI(3)P PI(5)P,4 alpha-helix bundle,,Bolt 2026,,"Activates NF-κB; AMPylase of SidE generated PR-Ub, activity activated by actin binding"
+Q5ZSI8,Lpg2529,lpg2529,Lem27,304,408,lpn,PI(3)P,4 alpha-helix bundle,,Bolt 2026,,Deubiquitinase; localizes to the LCV and regulated Rab10 ubiquitination levels
+Q5ZSH1,Lpg2546,lpg2546,,278,464,lpn,PI(3)P PI(4)P,7 alpha-helix bundle,,Bolt 2026,,
+Q5ZSD2,Lpg2587,lpg2587,,396,516,lpn,PI(3)P,4 alpha-helix bundle,,Bolt 2026,Table 391; took fig,
+Q5ZZI0,Lpg0030,lpg0030,RavB,154,296,lpn,PI(3)P,5 alpha-helix bundle,LED035,Known,Table 721-863; out of range; added fig data,
+Q5ZZ51,Lpg0160,lpg0160,RavD,214,325,lpn,PI(3)P,7 alpha-helix bundle,,Known,,"Deubiquitinase that removes ubiquitin from the LCV, prevents lysosomal fusion with LCV, and inhibits NF-κB signaling"
+Q5ZXN6,Lpg0695,lpg0695,AnkX,491,949,lpn,PI(3)P PI(4)P,,,Known,,Phosphocholinates Rab1 and 35; modulates endocytic traffic
+Q5ZWZ3,Lpg0940,lpg0940,LidA,190,400,lpn,PI(3)P PI(4)P,,,Known,,Facilitates Rab1 recruitment to the LCV and stabilizes active Rab1
+Q5ZWI4,Lpg1101,lpg1101,Lem4,223,317,lpn,PI(4)P,6 alpha-helix bundle,P4M,Known,,Phosphotyrosine phosphatase that localizes to lysosomes
+Q5ZWG4,Lpg1121,lpg1121,Ceg19,130,242,lpn,PI(3)P,5 alpha-helix bundle,LED027,Known,Table 13-242; took fig,
+Q5ZVF7,Lpg1483,lpg1483,LegK1,381,500,lpn,PI(3)P,4 alpha-helix bundle,LED006,Known,,Activates NF-κB pathway through phosphorylation of IκB alpha
+Q5ZVF6,Lpg1484,lpg1484,Ceg22,90,213,lpn,PI(3)P,4 alpha-helix bundle,LED006,Known,,
+Q5ZVF2,Lpg1488,lpg1488,LegC5/Lgt3,721,863,lpn,PI(3)P,4 alpha-helix bundle,LED006,Known,,"Glycosyltransferase of eEF1A, inhibits protein translation"
+Q5ZVE9,Lpg1491,lpg1491,Lem9,201,377,lpn,PI(3)P,4 alpha-helix bundle,LED006,Known,,
+Q5ZV52,Lpg1588,lpg1588,LegC6,523,634,lpn,PI(3)P,4 alpha-helix bundle,LED006,Known,,
+Q5ZUY2,Lpg1660,lpg1660,LegL3,1,425,lpn,PI(3)P PS,Leucine-rich repeat,,Known,from fig ,
+Q5ZUV9,Lpg1683,lpg1683,RavZ,326,429,lpn,PI(3)P,5 alpha-helix bundle,LED027,Known,,Inhibits autophagy through the irreversible deconjugation of Atg8 on autophagosomes
+Q5ZU30,Lpg1978,lpg1978,SetA,515,628,lpn,PI(3)P,4 alpha-helix bundle,,Known,Table 615-728; out of range; took fig data,Promiscuous glycosyltransferase activated by PI(3)P binding; disrupts vesicular traffic
+Q5ZTE0,Lpg2222,lpg2222,LpnE,1,275,lpn,PI(3)P,ARM repeat,,Known,from fig ,Interacts with OCRL1 on the LCV and assists with LCV biogenesis
+Q5ZTB4,Lpg2248,lpg2248,Lem21/LotA,617,734,lpn,PI(3)P,5 alpha-helix bundle,LED035,Known,,Localizes to the LCV where it cleaves ubiquitin chains through deubiquitinase activity
+Q5ZT54,Lpg2311,lpg2311,RidL,858,1108,lpn,PI(3)P,,,Known,,Binds to the retromer complex and inhibits retrograde traffic
+Q5ZT38,Lpg2327,lpg2327,,142,263,lpn,PI(3)P,4 alpha-helix bundle,LED006,Known,Table 348-479; out of range; took fig data,
+Q5ZSU1,Lpg2425,lpg2425,MavH,125,266,lpn,PI(3)P,5 alpha-helix bundle,LED035,Known,,Interacts with actin capping protein to stimulate actin polymerization
+Q5ZSQ3,Lpg2464,lpg2464,SidM,533,647,lpn,PI(4)P,6 alpha-helix bundle,P4M,Known,,"Recruits and activates Rab1 through GEF activity at LCV, locks Rab1 in active state by AMPylation"
+Q5ZSQ3,Lpg2464,lpg2464-gef,SidM,340,520,lpn,Rab1 GEF,,,Uniprot,,
+Q5ZSM7,Lpg2490,lpg2490,LepB,1210,1294,lpn,PI(3)P,4 alpha-helix bundle,LED006,Known,,Rab1 GAP; PI4-kinase that generates PI(4)P on the LCV
+Q5ZSK7,Lpg2510,lpg2510,SdcA,608,721,lpn,PI(4)P,4 alpha-helix bundle,P4C,Known,,Paralog of Lpg2511 (SidC)
+Q5ZSK6,Lpg2511,lpg2511,SidC,615,730,lpn,PI(4)P,4 alpha-helix bundle,P4C,Known,,Recruits ER-derived vesicles to the LCV; E3 ubiquitin ligase
+Q5ZSB6,Lpg2603,lpg2603,Lem28,326,413,lpn,PI(4)P,6 alpha-helix bundle,P4M,Known,,Kinase activated by inositol hexaphosphate
+P42212,GFP,gfp,,11,227,jellyfish,GFP,beta barrel ,,visual,,
+Q9UNE7,sidC,sidC,,226,300,human,E3 Ub ligase,,,Uniprot,,
