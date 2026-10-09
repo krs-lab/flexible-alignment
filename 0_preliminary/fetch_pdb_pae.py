@@ -83,7 +83,7 @@ def main():
     OUT_DIR.mkdir(parents=True, exist_ok=True)
 
     valid_uniprot_cols = {"uniprot_ids", "uniprot_id", "uniprot"}
-    valid_locus_cols = {"locus", "locus name", "locus_name", "locus tag", "locus_tag"}
+    valid_locus_cols = {"locus", "locus name", "locus_name", "locus tag", "locus_tag", "locus_id"}
 
     entries = []  # List of tuples: (uniprot_id, output_name)
 
