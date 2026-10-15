@@ -55,4 +55,4 @@ Q5ZSK7,Lpg2510,lpg2510,SdcA,608,721,lpn,PI(4)P,4 alpha-helix bundle,P4C,Known,,P
 Q5ZSK6,Lpg2511,lpg2511,SidC,615,730,lpn,PI(4)P,4 alpha-helix bundle,P4C,Known,,Recruits ER-derived vesicles to the LCV; E3 ubiquitin ligase
 Q5ZSB6,Lpg2603,lpg2603,Lem28,326,413,lpn,PI(4)P,6 alpha-helix bundle,P4M,Known,,Kinase activated by inositol hexaphosphate
 P42212,GFP,gfp,,11,227,jellyfish,GFP,beta barrel ,,visual,,
-Q9UNE7,sidC,sidC,,226,300,human,E3 Ub ligase,,,Uniprot,,
+Q9UNE7,E3-ub-ligase,stub1,,143,303,human,E3 Ub ligase,,,Uniprot,,
