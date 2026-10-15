@@ -7,12 +7,14 @@ Computaitonally screening for PIP-binding domains across *Legionella pneumophila
 - Get the latest **AlphaFold models** with their corresponding PAE (predicted alignemnt error) files (.pdb + .json) with `fetch_pdb_pae.py`. 
     - If needed convert the pdb/pae files' IDs into UniProt or Locus IDs with `convert_ids_uniprot_locus.py`
 - Slice domains out with given start-end amino acid residues with `domain_slicer.py`
-    - Domain slicer script requires biopython. Make sure it is installed before running. 
+    - Domain slicer script requires biopython. Make sure it is installed before running (for any script requiring biopython)
     - Alternatively, have biopython installed in a virtual environment and run the script from that env. 
 - Prepare all curated query domains in a query_dir. 
 - Prepare the test set 
-    - For domain-vs-domain (dvd) analysis: 
+    - Domain-vs-domain (dvd): 
         - Use `merizo` to segment the domains of the test protein set. 
+    - Domain-vs-200aa (dv200): 
+        - Slice the pdbs into 200aa long segments with `fixed-length_slicer.py`
 
 ### Commands
 
@@ -41,5 +43,9 @@ nohup python /fast_disk/visnu/merizo_work/Merizo/predict.py \
 
 # check job status 
 ps -p <job ID>
+# manual check in the dir should show domain files being generated
+
+## dv200
+python3 fixed-length_slicer.py -i dir_w_FL_pdbs/ -s 200
 ```
 
