@@ -25,11 +25,13 @@ python3 fetch_pdb_pae.py -i legionella_effectors_368.csv
 # convert IDs to corresponding uniprot/locus IDs
 python3 convert_ids_uniprot_locus.py -i pdb_pae_dir -k key.csv -d u2l
 
+# ----------
 ### query domain set 
 # slice domains w coordinates
 source /home/visnu/venvPyAnalysis/bin/activate # activates virtual env
 python3 domain_slicer.py -i pdb_container_dir -c residue_coordinates.csv
 
+# ----------
 ### dvd
 # segment domains with merizo 
 PDB_DIR="/dir/with/pdb/files"
@@ -45,9 +47,17 @@ nohup python /fast_disk/visnu/merizo_work/Merizo/predict.py \
 
 # check job status 
 ps -p <job ID>
+
 # manual check in the dir should show domain files being generated
 
-## dv200
+# check merizo segmentation outputs 
+for d in *.domains; do echo "=== $d ==="; cat "$d"; echo ""; done
+
+# segment domains according to merizo output; min domain taken 83aa 
+python3 slice_merizo_domains_v3_discontDom_minLen.py -m 83
+
+# ----------
+### dv200
 python3 fixed-length_slicer.py -i dir_w_FL_pdbs/ -s 200
 ```
 
