@@ -13,7 +13,7 @@ Computaitonally screening for PIP-binding domains across *Legionella pneumophila
 - Prepare the test set 
     - Domain-vs-domain (dvd): 
         - Use `merizo` to segment the domains of the test protein set. 
-        - Once merizo output is obtained, segment the pdbs with the merizo coordinates by `merizo_domain_slicer.py`, from insider the pdb container. 
+        - Once merizo output is obtained, segment the pdbs with the merizo coordinates by `merizo_domain_slicer.py`, from inside the pdb container. 
     - Domain-vs-200aa (dv200): 
         - Slice the pdbs into 200aa long segments with `fixed-length_slicer.py`
 
@@ -60,5 +60,12 @@ python3 slice_merizo_domains_v3_discontDom_minLen.py -m 83
 # ----------
 ### dv200
 python3 fixed-length_slicer.py -i dir_w_FL_pdbs/ -s 200
+
+# ----------
+### FATCAT dvd/dv200 
+python3 fatcat_updated.py --query query_domains/ --target target_domains_or_segments/ --log-threshold 3
+
+# generate histogram plots 
+
 ```
 
