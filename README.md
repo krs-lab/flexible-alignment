@@ -44,7 +44,8 @@ flex-alignment/
 
 | Tool | Version | Purpose |
 |------|---------|---------|
-| Python | 3.x | pipeline scripts |
+| Python    | 3.x | pipeline scripts |
+| Bash  |   | pipeline scripts | 
 | Tool name | x.y.z | what it is used for |
 | Tool name | x.y.z | what it is used for |
 
