@@ -13,6 +13,8 @@ Flexible alignment algorithms to find distant structural orthologs of proteins (
 
 Computaitonally screening for PIP-binding domains across *Legionella pneumophila* effector space through flexible domain alignment.  
 
+![Graphical summary: 200-aa segmenting vs rational segmentation](./graphical-summary.png)
+
 ```
 get protein IDs -> 01 get protein sequence -> 02 get/generate models -> 03 slice domains -> 04 flexible alignment -> 05 find concensus -> 06 validate hits -> 07 summarize -> report 
 ```
