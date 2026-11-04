@@ -38,6 +38,16 @@ flex-alignment/
             `-- README.md       # how to set up and do flexible alignment with Foldseek 
 ```
 
+## Requirements
+
+### Software
+
+| Tool | Version | Purpose |
+|------|---------|---------|
+| Python | 3.x | pipeline scripts |
+| Tool name | x.y.z | what it is used for |
+| Tool name | x.y.z | what it is used for |
+
 ---
 
 ### Steps 
