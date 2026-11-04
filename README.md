@@ -21,8 +21,8 @@ get protein IDs -> 01 get protein sequence -> 02 get/generate models -> 03 slice
 
 ```
 flex-alignment/
-├── README.md
-├── environment.yml        # conda environment
+|-- README.md
+|-- environment.yml        # conda environment
 ├── config/config.yaml     # paths and parameters
 ├── data/                  # inputs and intermediates (not tracked; see data/README.md)
 ├── scripts/               # numbered pipeline steps, run in order
