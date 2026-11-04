@@ -1,6 +1,6 @@
 # Flexible Alignment Pipeline
 
-Flexible alignment algorithms to find distant structural orthologs of proteins. 
+Flexible alignment algorithms to find distant structural orthologs of proteins (in progress)
 
 > **Status:** in progress  
 > **Version:** v0.1  
@@ -50,6 +50,28 @@ flex-alignment/
 | FATCAT    |           | flexible structural alignment     |
 | US-align  |           | flexible structural alignment     |
 | Foldseek  |           | flexible structural alignment     |
+
+---
+
+## Troubleshooting
+
+| Problem | Fix |
+|---------|-----|
+| Describe common error | How to resolve it |
+
+---
+
+## License
+
+State the license (see `LICENSE`).
+
+## Acknowledgements
+
+We thank Dr. Karl R. Schmitz and Dr. M. Ramona Neunuebel for their supervision and guidance, and the Departments of Biological Sciences and Chemistry & Biochemistry and the Center for Bioinformatics and Computational Biology (CBCB) at the University of Delaware for support and HPC access.
+
+## Funding
+
+K.R.S. was supported by NIH NIGMS P20GM104316 and NIH NIAID/NIGMS R01AI171196. The BIOMIX computational resource was funded by Delaware INBRE (NIGMS P20GM103446), NIH S10OD028725, the State of Delaware, and the Delaware Biotechnology Institute.
 
 ---
 
