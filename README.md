@@ -21,15 +21,18 @@ get protein IDs -> 01 get protein sequence -> 02 get/generate models -> 03 slice
 
 ```
 flex-alignment/
-|-- README.md
-|-- environment.yml        # conda environment
-├── config/config.yaml     # paths and parameters
-├── data/                  # inputs and intermediates (not tracked; see data/README.md)
-├── scripts/               # numbered pipeline steps, run in order
-│   └── utils/             # helper functions and optional one-liners
-├── results/               # outputs (not tracked)
-├── logs/                  # run logs (not tracked)
-└── docs/                  # extended notes
+|-- README.md                   # global instructions and layouts
+|-- tools 
+    |-- generate pdbs       
+    |   `-- README.md
+    |-- domain slicing 
+    |   |-- README.md
+    |   `-- merizo 
+    `-- domain alignment  
+        |-- README.md
+        |-- fatcat 
+        |-- us-align
+        `-- foldseek        
 ```
 
 ---
