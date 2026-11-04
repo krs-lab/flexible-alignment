@@ -17,6 +17,23 @@ Computaitonally screening for PIP-binding domains across *Legionella pneumophila
 get protein IDs -> 01 get protein sequence -> 02 get/generate models -> 03 slice domains -> 04 flexible alignment -> 05 find concensus -> 06 validate hits -> 07 summarize -> report 
 ```
 
+## Repository layout
+
+```
+flex-alignment/
+├── README.md
+├── environment.yml        # conda environment
+├── config/config.yaml     # paths and parameters
+├── data/                  # inputs and intermediates (not tracked; see data/README.md)
+├── scripts/               # numbered pipeline steps, run in order
+│   └── utils/             # helper functions and optional one-liners
+├── results/               # outputs (not tracked)
+├── logs/                  # run logs (not tracked)
+└── docs/                  # extended notes
+```
+
+---
+
 ### Steps 
 
 - Get the latest **AlphaFold models** with their corresponding PAE (predicted alignemnt error) files (.pdb + .json) with `fetch_pdb_pae.py`. 
