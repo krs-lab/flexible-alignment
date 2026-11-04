@@ -22,17 +22,20 @@ get protein IDs -> 01 get protein sequence -> 02 get/generate models -> 03 slice
 ```
 flex-alignment/
 |-- README.md                   # global instructions and layouts
-|-- tools 
+`-- tools 
     |-- generate pdbs       
     |   `-- README.md
     |-- domain slicing 
-    |   |-- README.md
     |   `-- merizo 
+    |       `-- README.md
     `-- domain alignment  
         |-- README.md
         |-- fatcat 
+        |   `-- README.md
         |-- us-align
-        `-- foldseek        
+        |   `-- README.md
+        `-- foldseek 
+            `-- README.md   
 ```
 
 ---
