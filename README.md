@@ -24,18 +24,18 @@ flex-alignment/
 |-- README.md                   # global instructions and layouts
 `-- tools 
     |-- generate pdbs       
-    |   `-- README.md
+    |   `-- README.md           # instructions on how to get/generate alphafold protein models 
     |-- domain slicing 
     |   `-- merizo 
-    |       `-- README.md
+    |       `-- README.md       # how to set up and slice domains using merizo 
     `-- domain alignment  
         |-- README.md
         |-- fatcat 
-        |   `-- README.md
+        |   `-- README.md       # how to set up and do flexible alignment with FATCAT 
         |-- us-align
-        |   `-- README.md
+        |   `-- README.md       # how to set up and do flexible alignment with US-align
         `-- foldseek 
-            `-- README.md   
+            `-- README.md       # how to set up and do flexible alignment with Foldseek 
 ```
 
 ---
