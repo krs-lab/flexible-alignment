@@ -1,6 +1,21 @@
-## Flexible alignment 
+# Flexible Alignment Pipeline
+
+Flexible alignment algorithms to find distant structural orthologs of proteins. 
+
+> **Status:** in progress 
+> **Version:** v0.1  
+> **Contact:** Visnu Chowdhury (pritom@udel.edu)
+> **Citation:** in progress
+
+---
+
+## Overview
 
 Computaitonally screening for PIP-binding domains across *Legionella pneumophila* effector space through flexible domain alignment.  
+
+```
+get protein IDs -> 01 get protein sequence -> 02 get/generate models -> 03 slice domains -> 04 flexible alignment -> 05 find concensus -> 06 validate hits -> 07 summarize -> report 
+```
 
 ### Steps 
 
