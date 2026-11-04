@@ -57,7 +57,7 @@ flex-alignment/
 
 | Problem | Fix |
 |---------|-----|
-| Describe common error | How to resolve it |
+| common error | How to resolve |
 
 ---
 
@@ -67,7 +67,7 @@ State the license (see `LICENSE`).
 
 ## Acknowledgements
 
-We thank Dr. Karl R. Schmitz and Dr. M. Ramona Neunuebel for their supervision and guidance, and the Departments of Biological Sciences and Chemistry & Biochemistry and the Center for Bioinformatics and Computational Biology (CBCB) at the University of Delaware for support and HPC access.
+Thanks to Dr. Karl R. Schmitz and Dr. M. Ramona Neunuebel for their supervision and guidance, and the Departments of Biological Sciences and Chemistry & Biochemistry and the Center for Bioinformatics and Computational Biology (CBCB) at the University of Delaware for support and HPC access.
 
 ## Funding
 
