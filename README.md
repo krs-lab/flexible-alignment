@@ -42,14 +42,14 @@ flex-alignment/
 
 ### Software
 
-| Tool      | Version   | Purpose |
-|------     |---------  |---------|
-| Python    | 3.x       | pipeline scripts |
-| Bash      |           | pipeline scripts | 
-| Merizo    | x.y.z     | structure aware domain segmenting |
-| FATCAT    | x.y.z     | flexible structural alignment |
-| | x.y.z     | |
-| | x.y.z     | |
+| Tool      | Version   | Purpose                           |
+|------     |---------  |---------                          |
+| Python    |           | pipeline scripts                  |
+| Bash      |           | pipeline scripts                  | 
+| Merizo    |           | structure aware domain segmenting |
+| FATCAT    |           | flexible structural alignment     |
+| US-align  |           | flexible structural alignment     |
+| Foldseek  |           | flexible structural alignment     |
 
 ---
 
