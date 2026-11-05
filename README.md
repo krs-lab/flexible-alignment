@@ -2,8 +2,7 @@
 
 Flexible alignment algorithms to find distant structural orthologs of proteins (in progress)
 
-> **Status:** in progress  
-> **Version:** v0.1  
+> **Status:** in progress (v0.1)
 > **Primary maintainer:** Visnu Chowdhury (pritom@udel.edu)  
 > **Lab**: Schmitz Laboratory, University of Delaware
 
