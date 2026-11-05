@@ -27,13 +27,12 @@ Structural alignment of query domains against target domains / segments with [Fo
 ```bash
 in progress
 ```
-> Use `foldseek-linux-sse2.tar.gz` if the CPU has no AVX2 support. Check with `grep avx2 /proc/cpuinfo`.
+> in progress
 
 ### Python dependencies (analysis and plotting)
 
 ```bash
-source /path/to/venvPyAnalysis/bin/activate   # TODO: your venv
-pip install pandas numpy matplotlib seaborn
+in progress
 ```
 
 | Tool       | Version | Notes |
@@ -41,29 +40,22 @@ pip install pandas numpy matplotlib seaborn
 | Foldseek   | TODO    | output of `foldseek version` |
 | Python     | TODO    | |
 | pandas     | TODO    | |
-| matplotlib | TODO    | |
 
 ---
 
 ## 2. Inputs
 
-| Input | Location | Description |
-|-------|----------|-------------|
-| Query domains | `query_domains/` | curated domains (`.pdb`), from `domain_slicer.py` |
-| Target set (dvd) | `target_domains/` | Merizo-segmented domains |
-| Target set (dv200) | `target_segments/` | 200-aa segments from `fixed-length_slicer.py` |
+| Input                 | Location              | Description |
+|-------                |----------             |-------------|
+| Query domains         | `query_domains`       | curated domains (`.pdb`), from `domain_slicer.py` |
+| Target set (dvd)      | `target_domains`      | Merizo-segmented domains |
+| Target set (dv200)    | `target_segments`     | 200-aa segments from `fixed-length_slicer.py` |
 
-Foldseek reads `.pdb` / `.cif` files directly, so no conversion is needed.
+Foldseek reads `.pdb` files directly, so no conversion is needed.
 
 ---
 
 ## 3. Running Foldseek
-
-### 3.1 Build target database (once per target set)
-
-```bash
-foldseek createdb target_domains/ targetDB
-```
 
 ### 3.2 Search (`easy-search`)
 
@@ -201,7 +193,7 @@ fig.savefig("results/foldseek_dvd_tm_vs_rmsd.png", dpi=300)
 ```
 
 Planned plots (TODO):
-- [ ] TM-score histogram: dvd vs dv200
+- [x] TM-score histogram: dvd vs dv200
 - [ ] Best-hit TM-score per query domain (bar)
 - [ ] Heatmap of query x target TM-scores
 
