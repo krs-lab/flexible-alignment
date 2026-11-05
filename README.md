@@ -4,19 +4,19 @@ Flexible alignment algorithms to find distant structural orthologs of proteins (
 
 > **Status:** in progress  
 > **Version:** v0.1  
-> **Contact:** Visnu Chowdhury (pritom@udel.edu)  
-> **Citation:** in progress  
+> **Primary maintainer:** Visnu Chowdhury (pritom@udel.edu)  
+> **Lab**: Schmitz Laboratory, University of Delaware
 
 ---
 
 ## Overview
 
-Computaitonally screening for PIP-binding domains across *Legionella pneumophila* effector space through flexible domain alignment.  
+Computationally screening for PIP-binding domains across *Legionella pneumophila* effector space through flexible domain alignment.  
 
 ![Graphical summary: 200-aa segmenting vs rational segmentation](./graphical-summ.png)
 
 ```
-get protein IDs -> 01 get protein sequence -> 02 get/generate models -> 03 slice domains -> 04 flexible alignment -> 05 find concensus -> 06 validate hits -> 07 summarize -> report 
+get protein IDs -> 01 get protein sequence -> 02 get/generate models -> 03 slice domains -> 04 flexible alignment -> 05 find consensus -> 06 validate hits -> 07 summarize -> report 
 ```
 
 ## Repository layout
@@ -54,18 +54,6 @@ flex-alignment/
 | Foldseek  |           | flexible structural alignment     |
 
 ---
-
-## Troubleshooting
-
-| Problem | Fix |
-|---------|-----|
-| common error | How to resolve |
-
----
-
-## License
-
-State the license (see `LICENSE`).
 
 ## Acknowledgements
 
