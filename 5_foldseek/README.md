@@ -193,7 +193,7 @@ fig.savefig("results/foldseek_dvd_tm_vs_rmsd.png", dpi=300)
 ```
 
 Planned plots (TODO):
-- [x] TM-score histogram: dvd vs dv200
+- [ ] TM-score histogram: dvd vs dv200
 - [ ] Best-hit TM-score per query domain (bar)
 - [ ] Heatmap of query x target TM-scores
 
