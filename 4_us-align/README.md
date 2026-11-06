@@ -126,10 +126,10 @@ rsync -avP serverUserName@ip.add.re.ss:/origin /destination
 python3 histogram_usalign_v1.6.py -i input_dir/sub_dir -tmq .4 -v highlight_list.csv -dpi 600
 # plots data on histogram 
 # options: 
-# -i input 
-# -tmq query TM-score threshold 
-# -v list of validated hits from before to highlight 
-# -dpi to output fig in specified resolution  
+#   -i input 
+#   -tmq query TM-score threshold 
+#   -v list of validated hits from before to highlight 
+#   -dpi to output fig in specified resolution  
 ```
 
 Planned plots (TODO):
