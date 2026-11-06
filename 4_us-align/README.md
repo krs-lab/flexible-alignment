@@ -114,7 +114,8 @@ python3 usalign_batch_v3.0.py -q dir_query_set -t dir_target_set
 
 ```bash 
 rsync -avP serverUserName@ip.add.re.ss:/origin /destination
-# copy us-align results to local machine 
+# copy us-align results to local machine with rsync  
+# or with GUI through FileZilla 
 ```
 
 ---
@@ -122,10 +123,13 @@ rsync -avP serverUserName@ip.add.re.ss:/origin /destination
 ## 7. Plotting
 
 ```python
-import pandas as pd
-import matplotlib.pyplot as plt
-
-# TODO
+python3 histogram_usalign_v1.6.py -i input_dir/sub_dir -tmq .4 -v highlight_list.csv -dpi 600
+# plots data on histogram 
+# options: 
+# -i input 
+# -tmq query TM-score threshold 
+# -v list of validated hits from before to highlight 
+# -dpi to output fig in specified resolution  
 ```
 
 Planned plots (TODO):
