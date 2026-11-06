@@ -106,6 +106,7 @@ Convert to CSV:
 python3 usalign_batch_v3.0.py -q dir_query_set -t dir_target_set
 
 # runs us-align through the script, with query and target directories as input 
+# on KRS-lab server 
 ```
 
 Cutoff notes:
