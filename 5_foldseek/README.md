@@ -10,13 +10,13 @@ Structural alignment of query domains against target domains / segments with [Fo
 
 ## Contents
 
-1. [Installation](#1-installation)
-2. [Inputs](#2-inputs)
-3. [Running Foldseek](#3-running-foldseek)
-4. [Getting the data](#4-getting-the-data)
-5. [Analysis](#5-analysis)
-6. [Plotting](#6-plotting)
-7. [Troubleshooting](#7-troubleshooting)
+- [ ] 1. [Installation](#1-installation)
+- [ ] 2. [Inputs](#2-inputs)
+- [ ] 3. [Running Foldseek](#3-running-foldseek)
+- [ ] 4. [Getting the data](#4-getting-the-data)
+- [ ] 5. [Analysis](#5-analysis)
+- [ ] 6. [Plotting](#6-plotting)
+- [ ] 7. [Troubleshooting](#7-troubleshooting)
 
 ---
 
