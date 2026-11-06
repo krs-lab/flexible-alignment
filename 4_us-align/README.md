@@ -104,17 +104,22 @@ Convert to CSV:
 
 ```python
 python3 usalign_batch_v3.0.py -q dir_query_set -t dir_target_set
-# runs us-align through the script, with query and target directories as input 
+# run us-align through the script, with query and target directories as input 
 # on KRS-lab server 
 ```
 
-Cutoff notes:
-- TM-score > 0.5 generally indicates the same fold.
-- TODO: state the thresholds used for this project and why.
+---
+
+## 6. File transfer 
+
+```bash 
+rsync -avP serverUserName@ip.add.re.ss:/origin /destination
+# copy us-align results to local machine 
+```
 
 ---
 
-## 6. Plotting
+## 7. Plotting
 
 ```python
 import pandas as pd
