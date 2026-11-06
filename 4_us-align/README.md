@@ -103,9 +103,9 @@ Convert to CSV:
 ## 5. Analysis
 
 ```python
-import pandas as pd
+python3 usalign_batch_v3.0.py -q dir_query_set -t dir_target_set
 
-# TODO: load output, add columns, pick best hit per query, filter candidates
+# runs us-align through the script, with query and target directories as input 
 ```
 
 Cutoff notes:
