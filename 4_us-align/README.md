@@ -10,13 +10,14 @@ Structural alignment of query domains against target domains / segments with [US
 
 ## Contents
 
-1. [Installation](#1-installation)
-2. [Inputs](#2-inputs)
-3. [Running US-align](#3-running-us-align)
-4. [Getting the data](#4-getting-the-data)
-5. [Analysis](#5-analysis)
-6. [Plotting](#6-plotting)
-7. [Troubleshooting](#7-troubleshooting)
+- [ ] 1. [Installation](#1-installation)
+- [ ] 2. [Inputs](#2-inputs)
+- [ ] 3. [Running US-align](#3-running-us-align)
+- [ ] 4. [Getting the data](#4-getting-the-data)
+- [ ] 5. [Analysis](#5-analysis)
+- [ ] 6. [File transfer](#6-File-transfer)
+- [ ] 7. [Plotting](#7-plotting)
+- [ ] 8. [Troubleshooting](#8-troubleshooting)
 
 ---
 
