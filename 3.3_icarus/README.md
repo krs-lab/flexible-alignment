@@ -1,6 +1,4 @@
-# Foldseek: Domain Alignment :white_check_mark:
-
-Structural alignment of query domains against target domains / segments with [Foldseek](https://github.com/steineggerlab/foldseek). 
+# ICARUS: Flexible domain alignment :
 
 - **Author:** Visnu
 - **Lab / PI:** Schmitz Lab/ Karl Schmitz
@@ -12,62 +10,38 @@ Structural alignment of query domains against target domains / segments with [Fo
 ## 0. To do :white_check_mark:
 
 - [x] Install on lab server (WS2)
-- [x] File transfer 
-- [x] Test run on WS2 - TM-align mode
-- [x] Test run on WS2 - 3Di mode
+- [ ] Test run 
 - [ ] Run batch on DvD 
 - [ ] Run batch on Dv200aa
 - [ ] Plot with histograms 
 - [ ] Summarise to present/bench validation
-
 
 ---
 
 ## 1. Log :white_check_mark:
 
 ```bash
-### file transfer 
-# remote to local 
-rsync -avP krslab@server.ip:/remote/location/address/ .
+# 1. Navigate to your target workspace directory
+cd /fast_disk/visnu
 
-# local to remote 
-rsync -avP local_dir krslab@server.ip:/remote/location/address/
+# 2. Clone the official ICARUS repository
+git clone https://github.com/DSIMB/ICARUS.git
+cd /fast_disk/visnu/ICARUS
 
-# ---
+# 3. Create the Conda environment named 'icarus' from environment.yml
+/fast_disk/visnu/miniconda3/bin/conda env create -f environment.yml
 
-### Foldseek 
-## TM-align mode 
-# get alignemnt scores 
-rm -rf tmp
-foldseek easy-search query_domains2_curated target_domains5_merizo aln.tsv tmp \
-  --alignment-type 1 --exhaustive-search 1 -e inf \
-  --exact-tmscore 1 --tmalign-fast 0 \
-  --tmalign-hit-order 1 \
-  --format-output "query,target,alntmscore,qtmscore,ttmscore,lddt,rmsd,fident,alnlen,qstart,qend,tstart,tend,qaln,taln"
+# 4. Activate the icarus environment
+source /fast_disk/visnu/miniconda3/bin/activate icarus
 
-# add header to the .tsv 
-printf 'query\ttarget\talntmscore\tqtmscore\tttmscore\tlddt\trmsd\tfident\talnlen\tqstart\tqend\ttstart\ttend\tqaln\ttaln\n' | cat - aln.tsv > aln_header.tsv
+# 5. Fix ProDy dependency issue (downgrade setuptools to restore pkg_resources)
+pip install "setuptools<=80.10.2"
 
-# get superimposition
-mkdir -p superimposed_pdbs
-rm -rf tmp2
-foldseek easy-search query_domains2_curated target_domains5_merizo superimposed_pdbs_ tmp2 \
-  --alignment-type 1 --exhaustive-search 1 -e inf \
-  --exact-tmscore 1 --tmalign-fast 0 \
-  --tmalign-hit-order 1 \
-  --tmscore-threshold 0.1 --tmscore-threshold-mode 1 \
-  --format-mode 5
+# 6. Run ICARUS setup script to compile backend dependencies (SWORD)
+./install.sh
 
-## 3Di mode 
-# alignment scores 
-rm -rf tmp
-foldseek easy-search query_domains_curated target_effectorLpn_182_locusID_domains_merizo aln_3di.tsv tmp \
---alignment-type 2 \
---exhaustive-search 1 -e 1000 -c 0 \
---format-output "query,target,bits,evalue,fident,alnlen,qstart,qend,tstart,tend,qaln,taln,lddt"
-
-# adding header to csv 
-printf 'query\ttarget\talntmscore\tqtmscore\tttmscore\tlddt\trmsd\tfident\talnlen\tqstart\tqend\ttstart\ttend\tqaln\ttaln\n' | cat - aln.tsv > aln_header.tsv
+# Verify installation works cleanly
+python icarus.py -h
 
 ```
 
@@ -272,7 +246,7 @@ Planned plots (TODO):
 | `results/*_best_per_query.csv` | top hit per query |
 | `results/*.png` | plots |
 
-## References :white_check_mark:
+## References
 
-- van Kempen M. et al. Fast and accurate protein structure search with Foldseek. *Nat Biotechnol* (2024). https://doi.org/10.1038/s41587-023-01773-0
-- Foldseek GitHub: https://github.com/steineggerlab/foldseek
+- add citation 
+- ICARUS GitHub: https://github.com/DSIMB/ICARUS
