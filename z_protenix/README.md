@@ -12,18 +12,93 @@ Protenix predictions to rank which protein domains show promising ipTM scores ag
 ## 0. To do
 
 - [x] Reboot server and confirm GPU works
-- [ ] Test run on small batch on WS2 
-- [ ] If successful run on full/larger set 
-- [ ] Else, install on BIOMIX 
-- [ ] Test run 
-- [ ] Run on full/actual data set 
+- [ ] Install on lab server (WS2) 
+- [ ] Test run on WS2 
+- [ ] Install on HPC cluster + test run 
 - [ ] Decide: lab server or HPC for the full batch
 - [ ] Run batch
 - [ ] Summarise ipTM and pick domains for bench validation
 
 ---
 
-## 1. Goal
+## 1. Log
+
+```bash
+## install on WS2 (lab server)
+# 1. Navigate to your target directory
+cd /fast_disk/visnu
+
+# 2. Download and install Miniconda silently into /fast_disk/visnu/miniconda3
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+bash miniconda.sh -b -p /fast_disk/visnu/miniconda3
+rm miniconda.sh
+
+# 3. Create a clean Python 3.11 environment named protenix_env
+/fast_disk/visnu/miniconda3/bin/conda create -n protenix_env python=3.11 -y
+
+# 4. Clone the Protenix repository
+git clone https://github.com/bytedance/Protenix.git
+cd Protenix
+
+# 5. Perform an editable installation using the environment's explicit pip binary
+/fast_disk/visnu/miniconda3/envs/protenix_env/bin/pip install -e .
+
+# verifying 
+/fast_disk/visnu/miniconda3/envs/protenix_env/bin/python -c "
+import torch
+import protenix
+print('CUDA Available:', torch.cuda.is_available())
+print('Protenix Path:', protenix.__file__)
+"
+
+# ---
+
+## install on BIOMIX 
+# Set up local directory structure
+mkdir -p /home/pritom/schmitzLab/tools
+cd /home/pritom/schmitzLab/tools
+
+# Download and install Miniconda (if not already present)
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+bash miniconda.sh -b -p /home/pritom/schmitzLab/tools/miniconda3
+rm miniconda.sh
+
+# Source conda and create a clean Python 3.11 environment
+source /home/pritom/schmitzLab/tools/miniconda3/etc/profile.d/conda.sh
+conda create -n protenix_env python=3.11 -y
+conda activate protenix_env
+
+# Clone the repository (or navigate to your existing local clone)
+cd /home/pritom/schmitzLab/tools
+git clone https://github.com/bytedance/Protenix.git
+cd Protenix
+
+# Perform an editable installation
+pip install -e .
+
+# Save this script as /home/pritom/schmitzLab/tools/run_protenix.sbatch:
+#!/bin/bash
+#SBATCH --job-name=protenix_job
+#SBATCH --partition=gpu
+#SBATCH --qos=gpu
+#SBATCH --gres=gpu:1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=32G
+#SBATCH --time=02:00:00
+#SBATCH --output=protenix_%j.out
+#SBATCH --error=protenix_%j.err
+
+# Source local conda profile and activate environment
+source /home/pritom/schmitzLab/tools/miniconda3/etc/profile.d/conda.sh
+conda activate protenix_env
+
+# Run your Protenix inference or command here
+protenix --help
+
+sbatch /home/pritom/schmitzLab/tools/run_protenix.sbatch
+squeue -u pritom
+
+```
 
 What question is this answering? One or two sentences.
 
@@ -119,7 +194,9 @@ Short interpretation: `<what stands out, what to validate next>`
 
 Newest first. One line per commit-worthy step.
 
-- YYYY-MM-DD: installed Protenix in `/fast_disk/visnu/protenix_env`
+- 2026-11-10: 
+
+
 - YYYY-MM-DD: GPU not usable (driver/library mismatch), reboot requested
 - YYYY-MM-DD: ...
 
