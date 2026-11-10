@@ -232,7 +232,7 @@ Planned plots (TODO):
 | `results/*_best_per_query.csv` | top hit per query |
 | `results/*.png` | plots |
 
-## References :white_check_mark:
+## References :white_check_mark: :heavy_check_mark:
 
 - van Kempen M. et al. Fast and accurate protein structure search with Foldseek. *Nat Biotechnol* (2024). https://doi.org/10.1038/s41587-023-01773-0
 - Foldseek GitHub: https://github.com/steineggerlab/foldseek
