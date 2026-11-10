@@ -12,8 +12,10 @@ Protenix predictions to rank which protein domains show promising ipTM scores ag
 ## 0. To do
 
 - [x] Reboot server and confirm GPU works
-- [ ] Install on lab server (WS2) 
+- [x] Install on lab server (WS2) 
 - [ ] Test run on WS2 
+- [x] Install on HPC cluster (BIOMIX)
+- [ ] Test run on BIOMIX
 - [ ] Install on HPC cluster + test run 
 - [ ] Decide: lab server or HPC for the full batch
 - [ ] Run batch
