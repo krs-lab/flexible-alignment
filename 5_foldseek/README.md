@@ -59,7 +59,15 @@ foldseek easy-search query_domains2_curated target_domains5_merizo superimposed_
   --format-mode 5
 
 ## 3Di mode 
+# alignment scores 
+rm -rf tmp
+foldseek easy-search query_domains_curated target_effectorLpn_182_locusID_domains_merizo aln_3di.tsv tmp \
+--alignment-type 2 \
+--exhaustive-search 1 -e 1000 -c 0 \
+--format-output "query,target,bits,evalue,fident,alnlen,qstart,qend,tstart,tend,qaln,taln,lddt"
 
+# adding header to csv 
+printf 'query\ttarget\talntmscore\tqtmscore\tttmscore\tlddt\trmsd\tfident\talnlen\tqstart\tqend\ttstart\ttend\tqaln\ttaln\n' | cat - aln.tsv > aln_header.tsv
 
 ```
 
