@@ -1,11 +1,25 @@
 # Protenix batch: domain vs. PIP moiety screen
 
-Short one-line summary: Protenix predictions to rank which protein domains show promising ipTM scores against PIP moieties.
+Protenix predictions to rank which protein domains show promising ipTM scores against PIP moieties.
 
 - **Author:** Visnu
-- **Lab / PI:** Schmitz Lab
-- **Status:** setup / testing / running / analysis (edit as you go)
+- **Lab / PI:** Schmitz Lab/ Karl Schmitz
+- **Status:** testing
 - **Last updated:** YYYY-MM-DD
+
+---
+
+## 0. To do
+
+- [x] Reboot server and confirm GPU works
+- [ ] Test run on small batch on WS2 
+- [ ] If successful run on full/larger set 
+- [ ] Else, install on BIOMIX 
+- [ ] Test run 
+- [ ] Run on full/actual data set 
+- [ ] Decide: lab server or HPC for the full batch
+- [ ] Run batch
+- [ ] Summarise ipTM and pick domains for bench validation
 
 ---
 
@@ -116,16 +130,7 @@ Newest first. One line per commit-worthy step.
 | `nvidia-smi` driver/library mismatch | server needs a reboot (admin) |
 | | |
 
-## 11. To do
-
-- [ ] Reboot server and confirm GPU works
-- [ ] Test run on one small example
-- [ ] Test run on one real input, check VRAM use
-- [ ] Decide: lab server or HPC for the full batch
-- [ ] Run batch
-- [ ] Summarise ipTM and pick domains for bench validation
-
 ## 12. References
 
+- Chen X. et al. Protenix - Advancing Structure Prediction Through a Comprehensive AlphaFold3 Reproduction. bioRxiv (2025). https://doi.org/10.1101/2025.01.08.631967
 - Protenix: https://github.com/bytedance/protenix
-- `<paper, dataset, or collaborator notes>`
