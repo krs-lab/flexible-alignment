@@ -1,4 +1,4 @@
-# Foldseek: Domain Alignment
+# Foldseek: Domain Alignment :white_check_mark:
 
 Structural alignment of query domains against target domains / segments with [Foldseek](https://github.com/steineggerlab/foldseek). This is step **04 (flexible alignment)** of the pipeline, run alongside FATCAT and US-align.
 
@@ -9,7 +9,7 @@ Structural alignment of query domains against target domains / segments with [Fo
 
 ---
 
-## 0. To do
+## 0. To do :white_check_mark:
 
 - [x] Install on lab server (WS2)
 - [x] File transfer 
@@ -23,8 +23,7 @@ Structural alignment of query domains against target domains / segments with [Fo
 
 ---
 
-
-## 1. Log
+## 1. Log :white_check_mark:
 
 ```bash
 ### file transfer 
