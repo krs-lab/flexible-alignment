@@ -1,6 +1,6 @@
 # Foldseek: Domain Alignment :white_check_mark:
 
-Structural alignment of query domains against target domains / segments with [Foldseek](https://github.com/steineggerlab/foldseek). This is step **04 (flexible alignment)** of the pipeline, run alongside FATCAT and US-align.
+Structural alignment of query domains against target domains / segments with [Foldseek](https://github.com/steineggerlab/foldseek). 
 
 - **Author:** Visnu
 - **Lab / PI:** Schmitz Lab/ Karl Schmitz
