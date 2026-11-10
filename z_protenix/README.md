@@ -122,15 +122,12 @@ git clone https://github.com/bytedance/protenix.git
 cd protenix
 pip install -e .
 ```
-
-Record what you actually ended up with (this is what makes it reproducible):
-
-- Protenix version / commit: `<git rev-parse --short HEAD>`
-- Python: `<python --version>`
-- PyTorch / CUDA: `<python -c "import torch; print(torch.__version__, torch.version.cuda)">`
-- NVIDIA driver: `<from nvidia-smi once it works>`
-- Model checkpoint used: `<name and version>`
-- Weights / data location: `<path, and the env variable if one was set>`
+- Protenix version / commit: `85767b8`
+- Python: `Python 3.11.11`
+- PyTorch / CUDA: `2.7.1+cu126 12.6`
+- NVIDIA driver: `580.178.04, NVIDIA GeForce RTX 4070 Ti SUPER`
+- Model checkpoint used: `Protenix v2.0.0 official pretrained weights`
+- Weights / data location: `/fast_disk/visnu/Protenix/`
 
 Quick check that the GPU is visible:
 
