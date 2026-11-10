@@ -2,23 +2,35 @@
 
 Structural alignment of query domains against target domains / segments with [Foldseek](https://github.com/steineggerlab/foldseek). This is step **04 (flexible alignment)** of the pipeline, run alongside FATCAT and US-align.
 
-> **Status:** template (v0.0)  
-> **Input from:** step 03 (sliced domains)  
-> **Output to:** step 05 (find consensus)
+- **Author:** Visnu
+- **Lab / PI:** Schmitz Lab/ Karl Schmitz
+- **Status:** testing
+- **Last updated:** YYYY-MM-DD
 
 ---
 
-## Contents
+## 0. To do
 
-- [ ] 1. [Installation](#1-installation)
-- [ ] 2. [Inputs](#2-inputs)
-- [ ] 3. [Running Foldseek](#3-running-foldseek)
-- [ ] 4. [Getting the data](#4-getting-the-data)
-- [ ] 5. [Analysis](#5-analysis)
-- [ ] 6. [Plotting](#6-plotting)
-- [ ] 7. [Troubleshooting](#7-troubleshooting)
+- [x] Reboot server and confirm GPU works
+- [x] Install on lab server (WS2)
+- [ ] Test run on WS2
+- [x] Install on HPC cluster (BIOMIX)
+- [ ] Test run on BIOMIX
+- [ ] Install on HPC cluster + test run
+- [ ] Decide: lab server or HPC for the full batch
+- [ ] Run batch
+- [ ] Summarise ipTM and pick domains for bench validation
+
 
 ---
+
+
+## 1. Log
+
+```bash
+
+```
+
 
 ## 1. Installation
 
@@ -220,7 +232,7 @@ Planned plots (TODO):
 | `results/*_best_per_query.csv` | top hit per query |
 | `results/*.png` | plots |
 
-## References
+## References [x]
 
 - van Kempen M. et al. Fast and accurate protein structure search with Foldseek. *Nat Biotechnol* (2024). https://doi.org/10.1038/s41587-023-01773-0
 - Foldseek GitHub: https://github.com/steineggerlab/foldseek
