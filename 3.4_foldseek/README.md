@@ -36,6 +36,9 @@ rsync -avP local_dir krslab@server.ip:/remote/location/address/
 # ---
 
 ### Foldseek 
+# enable foldseek env; as installed inside conda env 
+source /fast_disk/visnu/foldseek_env.sh
+
 ## TM-align mode 
 # get alignemnt scores 
 rm -rf tmp
@@ -44,6 +47,13 @@ foldseek easy-search query_domains2_curated target_domains5_merizo aln.tsv tmp \
   --exact-tmscore 1 --tmalign-fast 0 \
   --tmalign-hit-order 1 \
   --format-output "query,target,alntmscore,qtmscore,ttmscore,lddt,rmsd,fident,alnlen,qstart,qend,tstart,tend,qaln,taln"
+# --alignment-type 1 :uses TM-align mode 
+# --exhaustive-search 1 :enables all-vs-all alignment 
+# -e inf :no matches are filtered out 
+# --exact-tmscore 1 :exact TM-score enabled 
+# --tmalign-fast 0 :disables TMalign's fast mode 
+# --tmalign-hit-order 1 :orders hits relative to query structure 
+# --format-output "..." :outputs specified cols written in output 
 
 # add header to the .tsv 
 printf 'query\ttarget\talntmscore\tqtmscore\tttmscore\tlddt\trmsd\tfident\talnlen\tqstart\tqend\ttstart\ttend\tqaln\ttaln\n' | cat - aln.tsv > aln_header.tsv
