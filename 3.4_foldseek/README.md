@@ -18,7 +18,7 @@ Structural alignment of query domains against target domains / segments with [Fo
 - [x] Run batch on DvD (TMaling + 3Di)
 - [x] Run batch on Dv200aa (TMalign + 3Di)
 - [x] Plot with histograms (TMalign + 3Di)
-- [ ] Summarise to present/bench validation
+- [x] Summarise to present/bench validation
 
 
 ---
