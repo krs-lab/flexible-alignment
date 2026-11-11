@@ -42,7 +42,7 @@ source /fast_disk/visnu/foldseek_env.sh
 ## TM-align mode 
 # get alignemnt scores 
 rm -rf tmp
-foldseek easy-search query_domains2_curated target_domains5_merizo aln.tsv tmp \
+foldseek easy-search query_domain_dir/ target_domain_dir/ aln_tmalign-mode.tsv tmp \
   --alignment-type 1 --exhaustive-search 1 -e inf \
   --exact-tmscore 1 --tmalign-fast 0 \
   --tmalign-hit-order 1 \
