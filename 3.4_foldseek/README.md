@@ -97,9 +97,35 @@ foldseek easy-search query_domain_dir/ target_domain_dir/ aln_3di_mode.tsv tmp \
 --alignment-type 2 \
 --exhaustive-search 1 -e 1000 -c 0 \
 --format-output "query,target,bits,evalue,fident,alnlen,qstart,qend,tstart,tend,qaln,taln,lddt"
+    # --alignment-type 2 :to run 3Di mode
+    # --exhaustive-search 1 :enables all-vs-all
+    # -e 1000 :E-value threshold 
+    # -c 0: min coverage threshold (0% indicates none discarded)
 
 # adding header to csv 
-printf 'query\ttarget\talntmscore\tqtmscore\tttmscore\tlddt\trmsd\tfident\talnlen\tqstart\tqend\ttstart\ttend\tqaln\ttaln\n' | cat - aln_3di_mode.tsv > aln_3di_mode_header.tsv
+printf 'query\ttarget\tbits\tevalue\tfident\talnlen\tqstart\tqend\ttstart\ttend\tqaln\ttaln\tlddt\n' | cat - aln_3di.tsv > aln_3di_header.tsv
+
+# ---
+
+# get superimposition with 3Di 
+rm -rf tmp2
+foldseek easy-search query_domain_dir/ target_domain_dir/ sup_3di_ tmp2 \
+  --alignment-type 2 \
+  --exhaustive-search 1 -e 1000 -c 0 \
+  --format-mode 5
+    # --format-mode 5 :mode 5 outputs structural superimposition pdb files
+
+# create target directory, move all generated pdbs inside; clean up tmps
+mkdir -p superimposed_pdbs_3di
+mv sup_*.pdb superimposed_pdbs_3di/
+rm -rf tmp2
+
+# ---
+
+### analysis 
+# split the .tsv same as before 
+# plot histogram with raw bit score >=13 and modified zscore of raw bit >=2
+python3 histogram_foldseek-3di_v1.8.py -i individual_fs_output_3di/ -bit-raw 13 -z-bit 2 -v hits_to_highlight.csv -dpi 600
 
 ```
 
