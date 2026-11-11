@@ -47,26 +47,35 @@ foldseek easy-search query_domain_dir/ target_domain_dir/ aln_tmalign-mode.tsv t
   --exact-tmscore 1 --tmalign-fast 0 \
   --tmalign-hit-order 1 \
   --format-output "query,target,alntmscore,qtmscore,ttmscore,lddt,rmsd,fident,alnlen,qstart,qend,tstart,tend,qaln,taln"
-# --alignment-type 1 :uses TM-align mode 
-# --exhaustive-search 1 :enables all-vs-all alignment 
-# -e inf :no matches are filtered out 
-# --exact-tmscore 1 :exact TM-score enabled 
-# --tmalign-fast 0 :disables TMalign's fast mode 
-# --tmalign-hit-order 1 :orders hits relative to query structure 
-# --format-output "..." :outputs specified cols written in output 
+    # --alignment-type 1 :uses TM-align mode 
+    # --exhaustive-search 1 :enables all-vs-all alignment 
+    # -e inf :no matches are filtered out 
+    # --exact-tmscore 1 :exact TM-score enabled 
+    # --tmalign-fast 0 :disables TMalign's fast mode 
+    # --tmalign-hit-order 1 :orders hits relative to query structure 
+    # --format-output "..." :outputs specified cols written in output 
 
 # add header to the .tsv 
-printf 'query\ttarget\talntmscore\tqtmscore\tttmscore\tlddt\trmsd\tfident\talnlen\tqstart\tqend\ttstart\ttend\tqaln\ttaln\n' | cat - aln.tsv > aln_header.tsv
+printf 'query\ttarget\talntmscore\tqtmscore\tttmscore\tlddt\trmsd\tfident\talnlen\tqstart\tqend\ttstart\ttend\tqaln\ttaln\n' | cat - aln_tmalign-mode.tsv > aln_tmalign-mode_header.tsv
 
 # get superimposition
 mkdir -p superimposed_pdbs
 rm -rf tmp2
-foldseek easy-search query_domains2_curated target_domains5_merizo superimposed_pdbs_ tmp2 \
+foldseek easy-search query_domain_dir/ target_domain_dir/ sup_ tmp2 \
   --alignment-type 1 --exhaustive-search 1 -e inf \
   --exact-tmscore 1 --tmalign-fast 0 \
   --tmalign-hit-order 1 \
   --tmscore-threshold 0.1 --tmscore-threshold-mode 1 \
   --format-mode 5
+    # sup_ :output prefix string 
+    # tmp2  :temporary working dir for foldseek 
+    # --tmscore-threshold 0.1 :minimum TM-score cutoff
+    # --tmscore-threshold-mode 1 :mode 1 normalizes TM-score against query len
+    # --format-mode 5 :mode 5 outputs structural superimposition pdb files
+# create target directory, move all generated pdbs inside
+mkdir -p superimposed_pdbs
+mv sup_*.pdb superimposed_pdbs/
+
 
 ## 3Di mode 
 # alignment scores 
