@@ -133,40 +133,6 @@ python3 histogram_foldseek-3di_v1.8.py -i individual_fs_output_3di/ -bit-raw 13 
 
 ```
 
-
-## 1. Installation
-
-### In progress
-
-```bash
-in progress
-```
-> in progress
-
-### Python dependencies (analysis and plotting)
-
-```bash
-in progress
-```
-
-| Tool       | Version | Notes |
-|------------|---------|-------|
-| Foldseek   | TODO    | output of `foldseek version` |
-| Python     | TODO    | |
-| pandas     | TODO    | |
-
----
-
-## 2. Inputs
-
-| Input                 | Location              | Description |
-|-------                |----------             |-------------|
-| Query domains         | `query_domains`       | curated domains (`.pdb`), from `domain_slicer.py` |
-| Target set (dvd)      | `target_domains`      | Merizo-segmented domains |
-| Target set (dv200)    | `target_segments`     | 200-aa segments from `fixed-length_slicer.py` |
-
-Foldseek reads `.pdb` files directly, so no conversion is needed.
-
 ---
 
 ## 7. Troubleshooting
