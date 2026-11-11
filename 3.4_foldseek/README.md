@@ -72,10 +72,18 @@ foldseek easy-search query_domain_dir/ target_domain_dir/ sup_ tmp2 \
     # --tmscore-threshold 0.1 :minimum TM-score cutoff
     # --tmscore-threshold-mode 1 :mode 1 normalizes TM-score against query len
     # --format-mode 5 :mode 5 outputs structural superimposition pdb files
-# create target directory, move all generated pdbs inside
+# create target directory, move all generated pdbs inside; clean up tmps
 mkdir -p superimposed_pdbs
 mv sup_*.pdb superimposed_pdbs/
+rm -rf tmp2
 
+# ---
+
+### analysis 
+# split the foldseek output for each query 
+python3 foldseek_output_splitter_v0.py -i aln_fs_tma_header.tsv -c query_col -o individual_fs_output_dir
+
+# ---
 
 ## 3Di mode 
 # alignment scores 
