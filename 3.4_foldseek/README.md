@@ -26,6 +26,8 @@ Structural alignment of query domains against target domains / segments with [Fo
 ## 1. Log :white_check_mark:
 
 ```bash
+# ===
+
 ### file transfer 
 # remote to local 
 rsync -avP krslab@server.ip:/remote/location/address/ .
@@ -33,7 +35,7 @@ rsync -avP krslab@server.ip:/remote/location/address/ .
 # local to remote 
 rsync -avP local_dir krslab@server.ip:/remote/location/address/
 
-# ---
+# ===
 
 ### Foldseek 
 # enable foldseek env; as installed inside conda env 
@@ -59,6 +61,8 @@ foldseek easy-search query_domain_dir/ target_domain_dir/ aln_tmalign-mode.tsv t
 printf 'query\ttarget\talntmscore\tqtmscore\tttmscore\tlddt\trmsd\tfident\talnlen\tqstart\tqend\ttstart\ttend\tqaln\ttaln\n' | cat - aln_tmalign-mode.tsv > aln_tmalign-mode_header.tsv
 rm -rf tmp
 
+# ---
+
 # get superimposition
 mkdir -p superimposed_pdbs
 rm -rf tmp2
@@ -79,7 +83,7 @@ mkdir -p superimposed_pdbs
 mv sup_*.pdb superimposed_pdbs/
 rm -rf tmp2
 
-# ---
+# ===
 
 ### analysis 
 # split the foldseek output for each query 
@@ -88,9 +92,9 @@ python3 foldseek_output_splitter_v0.py -i aln_fs_tma_header.tsv -c query_col -o 
 # plot histograms for each query 
 python3 histogram_foldseek_v1.6.py -i individual_fs_output/ -tmq 0.4 -v hits_to_highlight.csv -dpi 600
 
-# ---
+# ===
 
-## 3Di mode 
+## 3Di 
 # alignment scores 
 rm -rf tmp
 foldseek easy-search query_domain_dir/ target_domain_dir/ aln_3di_mode.tsv tmp \
@@ -120,7 +124,7 @@ mkdir -p superimposed_pdbs_3di
 mv sup_*.pdb superimposed_pdbs_3di/
 rm -rf tmp2
 
-# ---
+# ===
 
 ### analysis 
 # split the .tsv same as before 
