@@ -55,8 +55,9 @@ foldseek easy-search query_domain_dir/ target_domain_dir/ aln_tmalign-mode.tsv t
     # --tmalign-hit-order 1 :orders hits relative to query structure 
     # --format-output "..." :outputs specified cols written in output 
 
-# add header to the .tsv 
+# add header to the .tsv; clean up 
 printf 'query\ttarget\talntmscore\tqtmscore\tttmscore\tlddt\trmsd\tfident\talnlen\tqstart\tqend\ttstart\ttend\tqaln\ttaln\n' | cat - aln_tmalign-mode.tsv > aln_tmalign-mode_header.tsv
+rm -rf tmp
 
 # get superimposition
 mkdir -p superimposed_pdbs
@@ -72,6 +73,7 @@ foldseek easy-search query_domain_dir/ target_domain_dir/ sup_ tmp2 \
     # --tmscore-threshold 0.1 :minimum TM-score cutoff
     # --tmscore-threshold-mode 1 :mode 1 normalizes TM-score against query len
     # --format-mode 5 :mode 5 outputs structural superimposition pdb files
+
 # create target directory, move all generated pdbs inside; clean up tmps
 mkdir -p superimposed_pdbs
 mv sup_*.pdb superimposed_pdbs/
@@ -83,18 +85,21 @@ rm -rf tmp2
 # split the foldseek output for each query 
 python3 foldseek_output_splitter_v0.py -i aln_fs_tma_header.tsv -c query_col -o individual_fs_output_dir
 
+# plot histograms for each query 
+python3 histogram_foldseek_v1.6.py -i individual_fs_output/ -tmq 0.4 -v hits_to_highlight.csv -dpi 600
+
 # ---
 
 ## 3Di mode 
 # alignment scores 
 rm -rf tmp
-foldseek easy-search query_domains_curated target_effectorLpn_182_locusID_domains_merizo aln_3di.tsv tmp \
+foldseek easy-search query_domain_dir/ target_domain_dir/ aln_3di_mode.tsv tmp \
 --alignment-type 2 \
 --exhaustive-search 1 -e 1000 -c 0 \
 --format-output "query,target,bits,evalue,fident,alnlen,qstart,qend,tstart,tend,qaln,taln,lddt"
 
 # adding header to csv 
-printf 'query\ttarget\talntmscore\tqtmscore\tttmscore\tlddt\trmsd\tfident\talnlen\tqstart\tqend\ttstart\ttend\tqaln\ttaln\n' | cat - aln.tsv > aln_header.tsv
+printf 'query\ttarget\talntmscore\tqtmscore\tttmscore\tlddt\trmsd\tfident\talnlen\tqstart\tqend\ttstart\ttend\tqaln\ttaln\n' | cat - aln_3di_mode.tsv > aln_3di_mode_header.tsv
 
 ```
 
