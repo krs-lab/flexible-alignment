@@ -13,11 +13,11 @@ Structural alignment of query domains against target domains / segments with [Fo
 
 - [x] Install on lab server (WS2)
 - [x] File transfer 
-- [x] Test run on WS2 w TM-align mode
-- [x] Test run on WS2 w 3Di mode
-- [x] Run batch on DvD w TMaling and 3Di 
-- [ ] Run batch on Dv200aa w TMalign and 3Di 
-- [ ] Plot with histograms w TMalign + 3Di 
+- [x] Test run on WS2 (TMalign)
+- [x] Test run on WS2 (3Di)
+- [x] Run batch on DvD (TMaling + 3Di)
+- [ ] Run batch on Dv200aa (TMalign + 3Di)
+- [ ] Plot with histograms (TMalign + 3Di)
 - [ ] Summarise to present/bench validation
 
 
