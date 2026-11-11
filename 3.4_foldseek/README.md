@@ -15,8 +15,10 @@ Structural alignment of query domains against target domains / segments with [Fo
 - [x] File transfer 
 - [x] Test run on WS2 - TM-align mode
 - [x] Test run on WS2 - 3Di mode
-- [ ] Run batch on DvD 
-- [ ] Run batch on Dv200aa
+- [x] Run batch on DvD - TMaling
+- [x] Run batch on DvD - 3Di 
+- [ ] Run batch on Dv200aa - TMalign
+- [ ] Run batch on Dv200aa - 3Di 
 - [ ] Plot with histograms 
 - [ ] Summarise to present/bench validation
 
