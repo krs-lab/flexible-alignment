@@ -131,6 +131,11 @@ rm -rf tmp2
 # plot histogram with raw bit score >=13 and modified zscore of raw bit >=2
 python3 histogram_foldseek-3di_v1.8.py -i individual_fs_output_3di/ -bit-raw 13 -z-bit 2 -v hits_to_highlight.csv -dpi 600
 
+# --- 
+
+## condense tmalign and 3di 
+python3 condense_foldseek_v0.1.py -i-tma foldseek_results_for_query1_tma.tsv -qtm 0.4 -i-3di foldseek_results_for_query1_3di.tsv -bit-raw 13 -z-bit 2 -v-list hits_to_highlight.csv -dpi 600
+
 ```
 
 ---
