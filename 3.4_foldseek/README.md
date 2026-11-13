@@ -41,8 +41,7 @@ rsync -avP local_dir krslab@server.ip:/remote/location/address/
 # enable foldseek env; as installed inside conda env 
 source /fast_disk/visnu/foldseek_env.sh
 
-## TM-align mode 
-# get alignemnt scores 
+## Scores: TMalign mode
 rm -rf tmp
 foldseek easy-search query_domain_dir/ target_domain_dir/ aln_tmalign-mode.tsv tmp \
   --alignment-type 1 --exhaustive-search 1 -e inf \
@@ -63,7 +62,7 @@ rm -rf tmp
 
 # ---
 
-# get superimposition
+# Superimposition: TMalign mode
 mkdir -p superimposed_pdbs
 rm -rf tmp2
 foldseek easy-search query_domain_dir/ target_domain_dir/ sup_ tmp2 \
@@ -94,8 +93,7 @@ python3 histogram_foldseek_v1.6.py -i individual_fs_output/ -tmq 0.4 -v hits_to_
 
 # ===
 
-## 3Di 
-# alignment scores 
+## Alignment scores: 3Di mode 
 rm -rf tmp
 foldseek easy-search query_domain_dir/ target_domain_dir/ aln_3di_mode.tsv tmp \
 --alignment-type 2 \
@@ -111,7 +109,7 @@ printf 'query\ttarget\tbits\tevalue\tfident\talnlen\tqstart\tqend\ttstart\ttend\
 
 # ---
 
-# get superimposition with 3Di 
+# superimposition: 3Di mode
 rm -rf tmp2
 foldseek easy-search query_domain_dir/ target_domain_dir/ sup_3di_ tmp2 \
   --alignment-type 2 \
