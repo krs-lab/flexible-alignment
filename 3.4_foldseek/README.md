@@ -63,7 +63,6 @@ rm -rf tmp
 # ---
 
 # Superimposition: TMalign mode
-mkdir -p superimposed_pdbs
 rm -rf tmp2
 foldseek easy-search query_domain_dir/ target_domain_dir/ sup_ tmp2 \
   --alignment-type 1 --exhaustive-search 1 -e inf \
