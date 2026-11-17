@@ -41,6 +41,12 @@ rsync -avP local_dir krslab@server.ip:/remote/location/address/
 # enable foldseek env; as installed inside conda env 
 source /fast_disk/visnu/foldseek_env.sh
 
+# Run Foldseek in TM-align and 3Di mode to get alignment scores + superimposed files at once 
+chmod +x foldseek_dual_mode.sh
+./foldseek_dual_mode.sh query_domain_dir/ target_domain_dir/ <label, dvd/dv200> <threads, default 8>
+
+# then transfer everything to local dir > indivifuallize tsv for each domains > use that for pooling 
+
 ## Scores: TMalign mode
 rm -rf tmp
 foldseek easy-search query_domain_dir/ target_domain_dir/ aln_tmalign-mode.tsv tmp \
