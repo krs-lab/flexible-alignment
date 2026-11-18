@@ -4,7 +4,7 @@ Structural alignment of query domains against target domains / segments with [Fo
 
 - **Author:** Visnu Chowdhury 
 - **Lab / PI:** Schmitz Lab/ Karl Schmitz
-- **Status:** testing
+- **Status:** test complete
 - **Last updated:** 2026-11-18
 
 ---
