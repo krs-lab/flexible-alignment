@@ -100,6 +100,47 @@ protenix --help
 sbatch /home/pritom/schmitzLab/tools/run_protenix.sbatch
 squeue -u pritom
 
+
+# ===
+
+## test run 
+# getting the json file ready for protenix job 
+# domains 
+# get aa seq from pdb from chmerax
+sequence chain #1/A
+save <lpg2529_l4h.fasta> alignment 1/A
+# using script to get the fasta from a dir to make json file w/ domain aa seqs
+# getting ligand smiles from pubchem 
+# taking: 
+    # PI3AP:
+        # query: phosphatidylinositol 3-phosphate; Compound CID:446005
+    # PI4P
+        # query: phosphatidylinositol 4-phosphate; Compound CID:643965
+    # PI(4,5)P2
+        # query: phosphatidylinositol 4,5-phosphate; Compound CID:178202108
+    # PI
+        # query: phosphatidylinositol; Compound CID:15488999
+# json file ready to run protenix in batch mode
+
+# testing in WS2
+# initiate protenix env 
+source /fast_disk/visnu/miniconda3/bin/activate protenix_env
+# checkign GPU status 
+nvidia-smi
+# check if the batch file is there 
+ls batch.json
+
+# to run 
+PYTHONNOUSERSITE=1 CUDA_VISIBLE_DEVICES=0 nohup \
+  /fast_disk/visnu/miniconda3/envs/protenix_env/bin/protenix pred \
+  -i batch.json \
+  -o ./protenix_out \
+  --seeds 101 \
+  > protenix.log 2>&1 &
+# check progress
+tail -f protenix.log
+
+
 ```
 
 What question is this answering? One or two sentences.
