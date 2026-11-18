@@ -5,7 +5,7 @@ Structural alignment of query domains against target domains / segments with [Fo
 - **Author:** Visnu
 - **Lab / PI:** Schmitz Lab/ Karl Schmitz
 - **Status:** testing
-- **Last updated:** YYYY-MM-DD
+- **Last updated:** 2026-11-18
 
 ---
 
@@ -19,8 +19,8 @@ Structural alignment of query domains against target domains / segments with [Fo
 - [x] Run batch on Dv200aa (TMalign + 3Di)
 - [x] Plot with histograms (TMalign + 3Di)
 - [x] Summarise to present/bench validation
-- [x] Simplified script to run multiple steps at once 
-- [x] 2D plot to condense 3Di and TMalign hits
+- [x] Simplified script to run Foldseek 
+- [x] 2D plot to show common 3Di and TMalign hits
 
 
 ---
