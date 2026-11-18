@@ -2,7 +2,7 @@
 
 Structural alignment of query domains against target domains / segments with [Foldseek](https://github.com/steineggerlab/foldseek). 
 
-- **Author:** Visnu
+- **Author:** Visnu Chowdhury 
 - **Lab / PI:** Schmitz Lab/ Karl Schmitz
 - **Status:** testing
 - **Last updated:** 2026-11-18
