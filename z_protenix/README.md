@@ -117,16 +117,16 @@ squeue -u pritom
     # loading AA seq from FASTA containing dir 
     python3 make_input_v0.py dir_having_domain_fasta/ 
     
-# getting ligand smiles from pubchem 
-# taking: 
-    # PI3AP:
-        # query: phosphatidylinositol 3-phosphate; Compound CID:446005
-    # PI4P
-        # query: phosphatidylinositol 4-phosphate; Compound CID:643965
-    # PI(4,5)P2
-        # query: phosphatidylinositol 4,5-phosphate; Compound CID:178202108
-    # PI
-        # query: phosphatidylinositol; Compound CID:15488999
+    # get ligand SMILES (Simplified Molecular Input Line Entry System) from PubChem 
+        # manually entered in `make_input_v0.py`
+        # PI3AP:
+            # query: phosphatidylinositol 3-phosphate; Compound CID:446005
+        # PI4P: 
+            # query: phosphatidylinositol 4-phosphate; Compound CID:643965
+        # PI(4,5)P2: 
+            # query: phosphatidylinositol 4,5-phosphate; Compound CID:178202108
+        # PI (-ve control): 
+            # query: phosphatidylinositol; Compound CID:15488999
 # json file ready to run protenix in batch mode
 
 # testing in WS2
