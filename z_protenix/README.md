@@ -119,7 +119,7 @@ squeue -u pritom
     
     # get ligand SMILES (Simplified Molecular Input Line Entry System) from PubChem 
         # manually entered in `make_input_v0.py`
-        # PI3AP:
+        # PI3P:
             # query: phosphatidylinositol 3-phosphate; Compound CID:446005
         # PI4P: 
             # query: phosphatidylinositol 4-phosphate; Compound CID:643965
