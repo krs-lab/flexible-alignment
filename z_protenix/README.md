@@ -103,12 +103,16 @@ squeue -u pritom
 
 # ===
 
-## test run 
-# getting the json file ready for protenix job 
-# domains 
-# get aa seq from pdb from chmerax
-sequence chain #1/A
-save <lpg2529_l4h.fasta> alignment 1/A
+### Test run 
+# Prepare a JSON file for Protenix: 
+    # containing ligand chemical strucgture and domain AA residues 
+
+# Domain AA seq: 
+    # from domain PDBs through ChmeraX
+    # Open PDB in UCSF ChimeraX; in terminal select full seq 
+    sequence chain #1/A 
+    # save as fasta 
+    save <lpg2529_l4h.fasta> alignment 1/A
 # using script to get the fasta from a dir to make json file w/ domain aa seqs
 # getting ligand smiles from pubchem 
 # taking: 
