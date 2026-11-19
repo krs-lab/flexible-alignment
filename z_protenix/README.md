@@ -103,49 +103,68 @@ squeue -u pritom
 
 # ===
 
-### Test run 
-# Prepare a JSON file for Protenix: 
+### Protenix: Test run 
+# Prepare JSON file: 
     # containing ligand chemical strucgture and domain AA residues 
 
-    # Domain AA seq: 
-        # from domain PDBs through ChmeraX
-        # Open PDB in UCSF ChimeraX; in terminal select full seq 
-        sequence chain #1/A 
-        # save as fasta 
-        save <lpg2529_l4h.fasta> alignment 1/A
+# Domain AA seq: 
+    # from domain PDBs through ChmeraX
+    # Open PDB in UCSF ChimeraX; in terminal select full seq 
+    sequence chain #1/A 
+    # save as fasta 
+    save <lpg2529_l4h.fasta> alignment 1/A
 
-    # loading AA seq from FASTA containing dir 
-    python3 make_input_v0.py dir_having_domain_fasta/ 
+# loading AA seq from FASTA containing dir 
+python3 make_input_v0.py dir_having_domain_fasta/ 
     
-    # get ligand SMILES (Simplified Molecular Input Line Entry System) from PubChem 
-        # manually entered in `make_input_v0.py`
-        # PI3P:
-            # query: phosphatidylinositol 3-phosphate; Compound CID:446005
-        # PI4P: 
-            # query: phosphatidylinositol 4-phosphate; Compound CID:643965
-        # PI(4,5)P2: 
-            # query: phosphatidylinositol 4,5-phosphate; Compound CID:178202108
-        # PI (-ve control): 
-            # query: phosphatidylinositol; Compound CID:15488999
-# json file ready to run protenix in batch mode
+# get ligand SMILES (Simplified Molecular Input Line Entry System) from PubChem 
+    # manually entered in `make_input_v0.py`
+    # PI3P:
+        # query: phosphatidylinositol 3-phosphate; Compound CID:446005
+    # PI4P: 
+        # query: phosphatidylinositol 4-phosphate; Compound CID:643965
+    # PI(4,5)P2: 
+        # query: phosphatidylinositol 4,5-phosphate; Compound CID:178202108
+    # PI (-ve control): 
+        # query: phosphatidylinositol; Compound CID:15488999
 
-# testing in WS2
-# initiate protenix env 
-source /fast_disk/visnu/miniconda3/bin/activate protenix_env
-# checkign GPU status 
-nvidia-smi
-# check if the batch file is there 
-ls batch.json
+# running on WS2 (lab server)
+    # initiate protenix env 
+    source /fast_disk/visnu/miniconda3/bin/activate protenix_env
+    # checking GPU status 
+    nvidia-smi
+    # check for JSON batch file in the dir 
+    ls batch.json
 
-# to run 
+# running protenix engine 
 PYTHONNOUSERSITE=1 CUDA_VISIBLE_DEVICES=0 nohup \
   /fast_disk/visnu/miniconda3/envs/protenix_env/bin/protenix pred \
   -i batch.json \
   -o ./protenix_out \
   --seeds 101 \
   > protenix.log 2>&1 &
+    # PYTHONNOUSERSITE=1 :to make Python ignore user site dir 
+    # /absolute/path/of/protenix :skips path lookup and to use the working version 
 # check progress
 tail -f protenix.log
+
+# ===
+
+### Protenix: Interpretation 
+# tabulate the data 
+cd protenix_out
+python - <<'EOF' > scores.tsv
+import json, glob, os
+print("complex\tsample\trank\tiptm\tptm\tclash\tchain_pair_iptm")
+for f in sorted(glob.glob("*/seed_101/predictions/*summary_confidence*.json")):
+    d = json.load(open(f))
+    name = f.split("/")[0]
+    s = f.split("sample_")[-1].replace(".json","")
+    print(name, s, round(d["ranking_score"],3), round(d["iptm"],3), round(d["ptm"],3),
+          d.get("has_clash"), d.get("chain_pair_iptm"), sep="\t")
+EOF
+# GFP is showing an overall high ipTM with all ligands
+# but for the other PIP binders there is a decreasing trend of ipTMs relative to the negative control 
 
 
 ```
